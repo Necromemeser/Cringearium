@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Персональный помощник</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            color: #333;
+            margin-top: 20px;
+        }
+        #chatForm {
+            display: flex;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            padding: 10px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #chat {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 80px; /* Отступ для формы ввода */
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .message {
+            margin-bottom: 15px;
+        }
+        .user-message {
+            color: #007bff;
+        }
+        .ai-message {
+            color: #333;
+        }
+        .loading {
+            color: #888;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<h1>Персональный помощник</h1>
+
+<div id="chat">
+    <div id="response"></div>
+</div>
+
+<form id="chatForm">
+    <input type="text" id="userInput" name="userInput" required placeholder="Введите ваш запрос...">
+    <button type="submit">Отправить</button>
+</form>
+
+<script>
+    $(document).ready(function() {
+        $('#chatForm').on('submit', function(event) {
+            event.preventDefault();
+            var userInput = $('#userInput').val();
+
+            // Добавление сообщения пользователя в чат
+            $('#response').append('<div class="message user-message"><strong>Вы:</strong> ' + userInput + '</div>');
+
+            // Очистка поля ввода
+            $('#userInput').val('');
+
+            // Добавление индикатора загрузки
+            $('#response').append('<div class="message loading" id="loading">ИИ печатает...</div>');
+
+            // Создание уникального контейнера для нового ответа ИИ
+            const aiMessageId = 'ai-message-' + Date.now(); // Уникальный ID
+            $('#response').append('<div class="message ai-message" id="' + aiMessageId + '"><strong>ИИ:</strong> </div>');
+
+            // Отправка запроса на сервер
+            fetch('/ollama?input=' + encodeURIComponent(userInput))
+                .then(response => {
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let buffer = '';
+
+                    function read() {
+                        return reader.read().then(({ done, value }) => {
+                            if (done) {
+                                // Удаление индикатора загрузки
+                                $('#loading').remove();
+                                return;
+                            }
+
+                            // Декодирование и добавление данных в буфер
+                            const chunk = decoder.decode(value, { stream: true });
+                            buffer += chunk;
+
+                            // Обновление текущего ответа ИИ в реальном времени
+                            $('#' + aiMessageId).html('<strong>ИИ:</strong> ' + buffer);
+
+                            // Продолжаем чтение потока
+                            return read();
+                        });
+                    }
+
+                    // Начинаем чтение потока
+                    read();
+                })
+                .catch(error => {
+                    // Удаление индикатора загрузки в случае ошибки
+                    $('#loading').remove();
+                    $('#response').append('<div class="message ai-message"><strong>ИИ:</strong> Ошибка: ' + error + '</div>');
+                });
+        });
+    });
+</script>
+</body>
+</html>
