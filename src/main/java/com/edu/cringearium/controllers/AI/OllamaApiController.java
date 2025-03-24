@@ -19,10 +19,10 @@ class OllamaApiController {
         this.messageService = messageService;
     }
 
-    @PostMapping("/ollama")
+    @PostMapping("/api/ollama")
     public Flux<String> ollama(@RequestParam Long chatId, @RequestParam String input) {
         // Сохранение пользовательского сообщения
-        messageService.saveUserMessage(chatId, input, null);
+        messageService.saveUserMessage(chatId, input);
 
         // Создаём поток ответа от AI
         Flux<String> responseStream = chatClient.prompt()
@@ -40,7 +40,7 @@ class OllamaApiController {
         return responseStream; // Отправляем поток клиенту
     }
 
-    @GetMapping("/ollama")
+    @GetMapping("/api/ollama")
     public Flux<String> ollama(@RequestParam String input) {
         return chatClient.prompt()
                 .user(input)

@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
+
 
 @Controller
 public class OllamaChatController {
@@ -18,7 +16,7 @@ public class OllamaChatController {
         this.chatClient = chatClient;
     }
 
-    @GetMapping("/chat")
+    @GetMapping("/api/chat")
     public String index() {
         return "aichat"; // Возвращает имя шаблона Thymeleaf
     }

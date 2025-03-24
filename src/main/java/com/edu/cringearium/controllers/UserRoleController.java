@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user/roles")
+@RequestMapping("/api/user/roles")
 public class UserRoleController {
 
     private final UserRoleRepository userRoleRepository;
