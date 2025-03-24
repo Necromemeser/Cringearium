@@ -6,21 +6,24 @@ import com.edu.cringearium.entities.UserRole;
 import com.edu.cringearium.repositories.UserRepository;
 import com.edu.cringearium.repositories.UserRoleRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public UserController(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
@@ -42,16 +45,15 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
 
+        String encodedPassword = passwordEncoder.encode(userDTO.getPasswordHash());
+
         User user = new User(
                 userDTO.getUsername(),
                 userDTO.getEmail(),
-                userDTO.getPasswordHash(),
+                encodedPassword,
                 userDTO.getProfilePic(),
                 userRoleOpt.get()
         );
-
-        System.out.println("СЮДА СМОТРИ\n\n\n" + userRoleOpt.get() + "\n\n");
-
 
         return ResponseEntity.ok(userRepository.save(user));
     }
