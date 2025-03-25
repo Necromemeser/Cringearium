@@ -1,7 +1,7 @@
-package com.edu.cringearium.repositories;
+package com.edu.cringearium.repositories.user;
 
 
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

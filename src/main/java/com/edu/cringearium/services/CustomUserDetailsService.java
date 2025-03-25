@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.edu.cringearium.config.security.CustomUserDetails;
-import com.edu.cringearium.entities.User;
-import com.edu.cringearium.repositories.UserRepository;
+import com.edu.cringearium.entities.user.User;
+import com.edu.cringearium.repositories.user.UserRepository;
 
 import java.util.Optional;
 

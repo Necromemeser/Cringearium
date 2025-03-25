@@ -3,7 +3,7 @@ package com.edu.cringearium.config.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 
 import java.util.Arrays;
 import java.util.Collection;

@@ -1,10 +1,10 @@
 package com.edu.cringearium.services;
 
 import com.edu.cringearium.config.security.CustomUserDetails;
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.entities.chat.Chat;
 import com.edu.cringearium.entities.chat.Message;
-import com.edu.cringearium.repositories.UserRepository;
+import com.edu.cringearium.repositories.user.UserRepository;
 import com.edu.cringearium.repositories.chat.ChatRepository;
 import com.edu.cringearium.repositories.chat.MessageRepository;
 import jakarta.transaction.Transactional;

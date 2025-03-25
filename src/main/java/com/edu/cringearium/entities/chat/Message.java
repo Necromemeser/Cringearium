@@ -1,7 +1,7 @@
 package com.edu.cringearium.entities.chat;
 
 
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
