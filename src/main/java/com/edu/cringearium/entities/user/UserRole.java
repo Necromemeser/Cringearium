@@ -1,4 +1,4 @@
-package com.edu.cringearium.entities;
+package com.edu.cringearium.entities.user;
 
 import jakarta.persistence.*;
 

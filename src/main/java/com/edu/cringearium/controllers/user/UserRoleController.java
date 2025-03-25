@@ -1,7 +1,7 @@
-package com.edu.cringearium.controllers;
+package com.edu.cringearium.controllers.user;
 
-import com.edu.cringearium.entities.UserRole;
-import com.edu.cringearium.repositories.UserRoleRepository;
+import com.edu.cringearium.entities.user.UserRole;
+import com.edu.cringearium.repositories.user.UserRoleRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

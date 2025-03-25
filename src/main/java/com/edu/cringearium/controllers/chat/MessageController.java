@@ -3,10 +3,10 @@ package com.edu.cringearium.controllers.chat;
 
 import com.edu.cringearium.entities.chat.Chat;
 import com.edu.cringearium.entities.chat.Message;
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.repositories.chat.ChatRepository;
 import com.edu.cringearium.repositories.chat.MessageRepository;
-import com.edu.cringearium.repositories.UserRepository;
+import com.edu.cringearium.repositories.user.UserRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

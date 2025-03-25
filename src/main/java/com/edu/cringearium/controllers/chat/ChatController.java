@@ -2,7 +2,7 @@ package com.edu.cringearium.controllers.chat;
 
 import com.edu.cringearium.config.security.CustomUserDetails;
 import com.edu.cringearium.dto.ChatDTO;
-import com.edu.cringearium.entities.User;
+import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.entities.chat.Chat;
 import com.edu.cringearium.entities.chat.Message;
 import com.edu.cringearium.repositories.chat.ChatRepository;
