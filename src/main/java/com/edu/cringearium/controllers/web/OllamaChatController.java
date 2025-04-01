@@ -1,4 +1,4 @@
-package com.edu.cringearium.controllers.AI;
+package com.edu.cringearium.controllers.web;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class OllamaChatController {
         this.chatClient = chatClient;
     }
 
-    @GetMapping("/api/chat")
+    @GetMapping("/chat")
     public String index() {
         return "aichat"; // Возвращает имя шаблона Thymeleaf
     }

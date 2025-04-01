@@ -9,6 +9,10 @@ body {
     height: 100vh;
     overflow-x: hidden;
 }
+header {
+    width: 100%;
+    height: 64px;
+}
 h1 {
     color: #333;
     margin-top: 20px;
@@ -80,7 +84,7 @@ button:hover {
 /* Панель слева */
 #sidePanel {
     position: fixed;
-    top: 0;
+    top: 64px;
     left: -250px; /* Панель скрыта по умолчанию */
     width: 250px;
     height: 100%;
@@ -114,7 +118,7 @@ button:hover {
 /* Кнопка для открытия панели */
 #sidePanelToggle {
     position: fixed;
-    top: 20px;
+    top: 66px;
     left: 20px;
     background-color: #007bff;
     color: white;

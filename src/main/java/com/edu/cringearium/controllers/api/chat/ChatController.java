@@ -1,4 +1,4 @@
-package com.edu.cringearium.controllers.chat;
+package com.edu.cringearium.controllers.api.chat;
 
 import com.edu.cringearium.config.security.CustomUserDetails;
 import com.edu.cringearium.dto.ChatDTO;

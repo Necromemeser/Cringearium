@@ -1,4 +1,4 @@
-package com.edu.cringearium.controllers.chat;
+package com.edu.cringearium.controllers.api.chat;
 
 
 import com.edu.cringearium.entities.chat.Chat;
@@ -44,8 +44,17 @@ public class MessageController {
             @RequestParam(required = false, defaultValue = "false") boolean isAiResponse) { // Индикатор для ИИ
 
         // Если это не сообщение от ИИ, проверяем наличие userId
-        if (!isAiResponse && (userId == null || userRepository.findById(userId).isEmpty())) {
-            return ResponseEntity.badRequest().build(); // Если userId отсутствует, ошибка
+//        if (!isAiResponse && (userId == null || userRepository.findById(userId).isEmpty())) {
+//            return ResponseEntity.badRequest().build(); // Если userId отсутствует, ошибка
+//        }
+
+        if (!isAiResponse) {
+            if (userId == null) {  // Сначала проверяем, что userId вообще передан
+                return ResponseEntity.badRequest().build();
+            }
+            if (userRepository.findById(userId).isEmpty()) { // Только потом ищем в БД
+                return ResponseEntity.badRequest().build();
+            }
         }
 
         Optional<Chat> chatOpt = chatRepository.findById(chatId);

@@ -1,6 +1,7 @@
 package com.edu.cringearium.entities.user;
 
 import com.edu.cringearium.entities.chat.Chat;
+import com.edu.cringearium.entities.course.Course;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -39,6 +40,15 @@ public class User {
     )
     private Set<Chat> chats;
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_course",
+            schema = "cringearium",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses;
+
     // Конструкторы
     public User() {}
 
@@ -49,6 +59,8 @@ public class User {
         this.profilePic = profilePic;
         this.userRole = userRole;
     }
+
+
 
     // Геттеры
     public Long getId() {
@@ -74,6 +86,11 @@ public class User {
     public UserRole getUserRole() {
         return userRole;
     }
+
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
 
     // Сеттеры
     public void setId(Long id) {
@@ -106,5 +123,9 @@ public class User {
 
     public void setChats(Set<Chat> chats) {
         this.chats = chats;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
     }
 }
