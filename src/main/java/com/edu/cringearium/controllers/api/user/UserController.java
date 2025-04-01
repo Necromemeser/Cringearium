@@ -1,4 +1,4 @@
-package com.edu.cringearium.controllers.user;
+package com.edu.cringearium.controllers.api.user;
 
 import com.edu.cringearium.dto.UserDTO;
 import com.edu.cringearium.entities.user.User;

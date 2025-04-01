@@ -30,10 +30,14 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/user").permitAll()
-                        .requestMatchers("/api/ollama").authenticated()
-                        .requestMatchers("/api/chats/**").authenticated()
-                        .requestMatchers("/api/**").authenticated())
+                        .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
+                        .requestMatchers("/api/**").permitAll() // delete later
+                        .requestMatchers("/", "/courses", "/register").permitAll()
+//                        .requestMatchers("/api/ollama").authenticated()
+//                        .requestMatchers("/api/chats/**").authenticated()
+                        .requestMatchers("/api/**").authenticated()
+                        .requestMatchers("/profile").authenticated()
+                        .requestMatchers("/**").authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
     }

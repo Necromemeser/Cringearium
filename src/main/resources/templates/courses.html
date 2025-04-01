@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cringearium - Каталог курсов</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/styles/styles.css}" rel="stylesheet">
+    <link th:href="@{/styles/coursePageStyle.css}" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Основное содержимое -->
+<main class="py-5">
+    <div class="container">
+        <!-- Заголовок и поиск -->
+        <div class="row mb-5">
+            <div class="col-md-8">
+                <h1 class="fw-bold">Каталог курсов</h1>
+                <p class="lead text-muted">Выберите курс для обучения из нашей коллекции</p>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Поиск курсов...">
+                    <button class="btn btn-primary" type="button" id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Фильтры</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="themeFilter" class="form-label">Тема курса</label>
+                                <select class="form-select" id="themeFilter">
+                                    <option value="">Все темы</option>
+                                    <option value="Программирование">Программирование</option>
+                                    <option value="Дизайн">Дизайн</option>
+                                    <option value="Маркетинг">Маркетинг</option>
+                                    <option value="Аналитика">Аналитика</option>
+                                    <option value="Бизнес">Бизнес</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="priceFilter" class="form-label">Цена</label>
+                                <select class="form-select" id="priceFilter">
+                                    <option value="">Любая</option>
+                                    <option value="free">Бесплатные</option>
+                                    <option value="paid">Платные</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="sortFilter" class="form-label">Сортировка</label>
+                                <select class="form-select" id="sortFilter">
+                                    <option value="newest">Сначала новые</option>
+                                    <option value="oldest">Сначала старые</option>
+                                    <option value="price_asc">Цена по возрастанию</option>
+                                    <option value="price_desc">Цена по убыванию</option>
+                                    <option value="name_asc">По названию (А-Я)</option>
+                                    <option value="name_desc">По названию (Я-А)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-secondary" id="resetFilters">Сбросить фильтры</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Список курсов -->
+        <div class="row" id="coursesContainer">
+            <!-- Карточки курсов будут загружаться здесь динамически -->
+            <div class="col-12 text-center my-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пагинация -->
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- Пагинация будет генерироваться динамически -->
+            </ul>
+        </nav>
+    </div>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript для работы с курсами -->
+<script th:src="@{/scripts/courseScript.js}"></script>
+</body>
+</html>

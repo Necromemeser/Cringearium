@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cringearium - Главная</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/styles/styles.css}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Шапка -->
+<div th:replace="fragments/header :: header"></div>
+
+<!-- Основное содержимое -->
+<main>
+    <!-- Герой-секция -->
+    <section class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Образование нового поколения</h1>
+                    <p class="lead mb-4">Cringearium - это инновационная платформа для онлайн-обучения, где вы можете освоить новые навыки, получить сертификаты и продвинуться по карьерной лестнице.</p>
+                    <div class="d-flex gap-3">
+                        <a href="/courses" class="btn btn-primary btn-lg px-4">Начать обучение</a>
+                        <a href="#features" class="btn btn-outline-primary btn-lg px-4">Узнать больше</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <img th:src="@{/images/hero-image.png}" alt="Образовательная платформа" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section id="features" class="features-section py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Почему выбирают нас</h2>
+                <p class="lead text-muted">Мы предлагаем лучшие условия для онлайн-обучения</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary bg-gradient rounded-circle mx-auto mb-4">
+                                <i class="fas fa-laptop-code text-white"></i>
+                            </div>
+                            <h3 class="h4">Доступность</h3>
+                            <p class="text-muted">Учитесь в любое время и в любом месте. Все материалы доступны 24/7.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary bg-gradient rounded-circle mx-auto mb-4">
+                                <i class="fas fa-chalkboard-teacher text-white"></i>
+                            </div>
+                            <h3 class="h4">Эксперты</h3>
+                            <p class="text-muted">Курсы разработаны практикующими специалистами и экспертами в своих областях.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <div class="feature-icon bg-primary bg-gradient rounded-circle mx-auto mb-4">
+                                <i class="fas fa-certificate text-white"></i>
+                            </div>
+                            <h3 class="h4">Сертификаты</h3>
+                            <p class="text-muted">Получайте сертификаты об окончании курсов, которые ценятся работодателями.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Популярные курсы -->
+    <section class="courses-section py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Популярные курсы</h2>
+                <p class="lead text-muted">Начните с самых востребованных направлений</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img th:src="@{/images/course1.jpg}" class="card-img-top" alt="Веб-разработка">
+                        <div class="card-body">
+                            <h5 class="card-title">Веб-разработка</h5>
+                            <p class="card-text text-muted">Полный курс по созданию современных веб-приложений с нуля.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="/courses/web" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img th:src="@{/images/course2.jpg}" class="card-img-top" alt="Data Science">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Science</h5>
+                            <p class="card-text text-muted">Основы анализа данных и машинного обучения на Python.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="/courses/data" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <img th:src="@{/images/course3.jpg}" class="card-img-top" alt="Мобильная разработка">
+                        <div class="card-body">
+                            <h5 class="card-title">Мобильная разработка</h5>
+                            <p class="card-text text-muted">Создание кроссплатформенных мобильных приложений.</p>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="/courses/mobile" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="/courses" class="btn btn-primary">Все курсы</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Отзывы -->
+    <section class="testimonials-section py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Отзывы наших студентов</h2>
+                <p class="lead text-muted">Узнайте, что говорят о нас</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img th:src="@{/images/user1.jpg}" class="rounded-circle me-3" width="50" height="50" alt="Алексей">
+                                <div>
+                                    <h5 class="mb-0">Алексей</h5>
+                                    <small class="text-muted">Курс по веб-разработке</small>
+                                </div>
+                            </div>
+                            <p class="card-text">"Отличная платформа! Материалы понятные, преподаватели отвечают на вопросы. После курса смог устроиться на работу."</p>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img th:src="@{/images/user2.jpg}" class="rounded-circle me-3" width="50" height="50" alt="Екатерина">
+                                <div>
+                                    <h5 class="mb-0">Екатерина</h5>
+                                    <small class="text-muted">Курс по Data Science</small>
+                                </div>
+                            </div>
+                            <p class="card-text">"Очень довольна обучением. Практические задания помогают закрепить теорию. Буду проходить еще курсы на этой платформе."</p>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex mb-3">
+                                <img th:src="@{/images/user3.jpg}" class="rounded-circle me-3" width="50" height="50" alt="Дмитрий">
+                                <div>
+                                    <h5 class="mb-0">Дмитрий</h5>
+                                    <small class="text-muted">Курс по мобильной разработке</small>
+                                </div>
+                            </div>
+                            <p class="card-text">"Отличный баланс теории и практики. После курса собрал портфолио и нашел первых клиентов на фрилансе."</p>
+                            <div class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

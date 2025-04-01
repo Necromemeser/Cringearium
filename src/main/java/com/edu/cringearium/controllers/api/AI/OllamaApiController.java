@@ -1,4 +1,4 @@
-package com.edu.cringearium.controllers.AI;
+package com.edu.cringearium.controllers.api.AI;
 
 import com.edu.cringearium.services.MessageService;
 import org.springframework.ai.chat.client.ChatClient;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 
 @RestController
-class OllamaApiController {
+public class OllamaApiController {
 
     private final ChatClient chatClient;
     private final MessageService messageService;
