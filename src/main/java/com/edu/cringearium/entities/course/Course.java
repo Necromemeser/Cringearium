@@ -35,6 +35,13 @@ public class Course {
     @Column(name = "price", nullable = false)
     private Long price;
 
+    @Column(name = "course_description", columnDefinition = "TEXT")
+    private String courseDescription;
+
+    @Lob
+    @Column(name = "course_image")
+    private byte[] courseImage;
+
     @ManyToMany
     @JoinTable(
             name = "user_course",
@@ -78,6 +85,14 @@ public class Course {
         return createdAt;
     }
 
+    public String getCourseDescription() {
+        return courseDescription;
+    }
+
+    public byte[] getCourseImage() {
+        return courseImage;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -101,5 +116,13 @@ public class Course {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public void setCourseDescription(String courseDescription) {
+        this.courseDescription = courseDescription;
+    }
+
+    public void setCourseImage(byte[] courseImage) {
+        this.courseImage = courseImage;
     }
 }

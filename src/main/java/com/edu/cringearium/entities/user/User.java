@@ -24,8 +24,9 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Lob
     @Column(name = "profile_pic")
-    private String profilePic;
+    private byte[] profilePic;
 
     @ManyToOne
     @JoinColumn(name = "user_role_id", nullable = false)
@@ -52,7 +53,14 @@ public class User {
     // Конструкторы
     public User() {}
 
-    public User(String username, String email, String passwordHash, String profilePic, UserRole userRole) {
+    public User(String username, String email, String passwordHash, UserRole userRole) {
+        this.username = username;
+        this.email = email;
+        this.passwordHash = passwordHash;
+        this.userRole = userRole;
+    }
+
+    public User(String username, String email, String passwordHash, byte[] profilePic, UserRole userRole) {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -79,7 +87,7 @@ public class User {
         return passwordHash;
     }
 
-    public String getProfilePic() {
+    public byte[] getProfilePic() {
         return profilePic;
     }
 
@@ -109,7 +117,7 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
-    public void setProfilePic(String profilePic) {
+    public void setProfilePic(byte[] profilePic) {
         this.profilePic = profilePic;
     }
 

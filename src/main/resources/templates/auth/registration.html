@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cringearium - Регистрация</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link th:href="@{/styles/styles.css}" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(0px);
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+        }
+        .success-message {
+            color: #198754;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+<div th:replace="fragments/header :: header"></div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-graduation-cap fa-3x text-primary mb-3"></i>
+                    <h2>Регистрация в Cringearium</h2>
+                </div>
+
+                <div id="successAlert" class="alert alert-success d-none" role="alert">
+                    Регистрация прошла успешно! Перенаправляем на страницу входа...
+                </div>
+
+                <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+                    <span id="errorMessage"></span>
+                </div>
+
+                <form id="registrationForm">
+                    <!-- Поле username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-control" id="username"
+                               placeholder="Введите имя пользователя" required>
+                        <div class="error-message" id="usernameError"></div>
+                    </div>
+
+                    <!-- Поле email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email"
+                               placeholder="Введите email" required>
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+
+                    <!-- Поле password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" class="form-control" id="password"
+                               placeholder="Введите пароль" required>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+
+                    <!-- Поле подтверждения пароля -->
+                    <div class="mb-4">
+                        <label for="confirmPassword" class="form-label">Подтвердите пароль</label>
+                        <input type="password" class="form-control" id="confirmPassword"
+                               placeholder="Повторите пароль" required>
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus me-2"></i> Зарегистрироваться
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <p>Уже есть аккаунт? <a th:href="@{/login}" class="text-decoration-none">Войдите</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Custom JS -->
+<script th:src="@{/scripts/registration.js}"></script>
+</body>
+</html>

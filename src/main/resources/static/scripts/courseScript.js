@@ -141,16 +141,27 @@ function displayCourses(courses) {
     const endIndex = Math.min(startIndex + coursesPerPage, courses.length);
     const paginatedCourses = courses.slice(startIndex, endIndex);
 
+
+
     let html = '';
 
     paginatedCourses.forEach(course => {
         const priceText = course.price ? `${course.price} ₽` : 'Бесплатно';
         const priceClass = course.price ? 'text-success fw-bold' : 'text-primary fw-bold';
 
+        // Загрузка изображения
+        const imageSrc = course.courseImage
+            ? `/api/courses/${course.id}/image`
+            : `/images/default-course.jpg`;
+
+        console.log(course)
+        console.log(imageSrc)
+
         html += `
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 shadow-sm course-card">
-                    <img src="/images/course${course.id % 3 + 1}.jpg" class="card-img-top" alt="${course.courseName}">
+                    <img src="${imageSrc}" class="card-img-top" alt="${course.courseName}"
+                    onerror="this.onerror=null; this.src='/images/default-course.jpg'">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <span class="badge bg-primary">${course.courseTheme}</span>

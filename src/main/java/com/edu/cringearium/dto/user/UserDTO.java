@@ -1,6 +1,7 @@
-package com.edu.cringearium.dto;
+package com.edu.cringearium.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Lob;
 
 public class UserDTO {
     @JsonProperty("username")
@@ -12,8 +13,10 @@ public class UserDTO {
     @JsonProperty("password_hash")
     private String passwordHash;
 
+
+    @Lob
     @JsonProperty("profile_pic")
-    private String profilePic;
+    private byte[] profilePic;
 
     @JsonProperty("user_role_id")
     private Long userRoleId;
@@ -21,7 +24,7 @@ public class UserDTO {
     // Конструкторы
     public UserDTO() {}
 
-    public UserDTO(String username, String email, String passwordHash, String profilePic, Long userRoleId) {
+    public UserDTO(String username, String email, String passwordHash, byte[] profilePic, Long userRoleId) {
         this.username = username;
         this.email = email;
         this.passwordHash = passwordHash;
@@ -39,8 +42,8 @@ public class UserDTO {
     public String getPasswordHash() { return passwordHash; }
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public String getProfilePic() { return profilePic; }
-    public void setProfilePic(String profilePic) { this.profilePic = profilePic; }
+    public byte[] getProfilePic() { return profilePic; }
+    public void setProfilePic(byte[] profilePic) { this.profilePic = profilePic; }
 
     public Long getUserRoleId() { return userRoleId; }
     public void setUserRoleId(Long userRoleId) { this.userRoleId = userRoleId; }

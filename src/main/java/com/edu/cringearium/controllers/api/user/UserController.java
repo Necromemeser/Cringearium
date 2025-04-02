@@ -1,6 +1,7 @@
 package com.edu.cringearium.controllers.api.user;
 
-import com.edu.cringearium.dto.UserDTO;
+import com.edu.cringearium.dto.user.UserDTO;
+import com.edu.cringearium.dto.user.UserRegistrationDTO;
 import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.entities.user.UserRole;
 import com.edu.cringearium.repositories.user.UserRepository;
@@ -52,6 +53,25 @@ public class UserController {
                 userDTO.getEmail(),
                 encodedPassword,
                 userDTO.getProfilePic(),
+                userRoleOpt.get()
+        );
+
+        return ResponseEntity.ok(userRepository.save(user));
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<User> registerUser(@RequestBody UserRegistrationDTO userDTO) {
+        Optional<UserRole> userRoleOpt = userRoleRepository.findById(3L);
+
+        System.out.println(userDTO.getUsername());
+        System.out.println(userDTO.getEmail());
+        System.out.println(userDTO.getPasswordHash());
+        String encodedPassword = passwordEncoder.encode(userDTO.getPasswordHash());
+
+        User user = new User(
+                userDTO.getUsername(),
+                userDTO.getEmail(),
+                encodedPassword,
                 userRoleOpt.get()
         );
 
