@@ -32,13 +32,25 @@ public class SecurityConfig {
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
                         .requestMatchers("/api/**").permitAll() // delete later
-                        .requestMatchers("/", "/courses", "/register").permitAll()
+                        .requestMatchers("/", "/courses", "/registration").permitAll()
 //                        .requestMatchers("/api/ollama").authenticated()
 //                        .requestMatchers("/api/chats/**").authenticated()
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/profile").authenticated()
                         .requestMatchers("/**").authenticated())
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .formLogin(form -> form
+                        .loginPage("/login")            // Указываем кастомную страницу логина
+                        .loginProcessingUrl("/perform_login") // URL для обработки формы
+                        .defaultSuccessUrl("/profile")   // Перенаправление после успешного входа
+                        .failureUrl("/login?error=true") // Перенаправление при ошибке
+                        .permitAll()
+
+                )
+                .logout(logout -> logout
+                .logoutUrl("/perform_logout")   // URL для выхода
+                .logoutSuccessUrl("/login?logout=true")
+                .permitAll()
+                )
                 .build();
     }
 

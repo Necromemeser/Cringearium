@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class CoursePageController {
 
     @GetMapping("/courses")
-    public String home(Model model) {
+    public String courses(Model model) {
         return "courses";
     }
+
+    @GetMapping("/courses/{id}")
+    public String coursePage(Model model) {return "coursePage";}
 }
