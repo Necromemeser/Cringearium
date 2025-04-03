@@ -131,6 +131,26 @@
 			<version>4.0.0</version>
 		</dependency>
 
+		<!-- Для работы с ЮKassa API -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+
+		<!-- Генерация UUID для идемпотентности -->
+		<dependency>
+			<groupId>com.fasterxml.uuid</groupId>
+			<artifactId>java-uuid-generator</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+
+		<!-- Для работы с датами в Thymeleaf -->
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-java8time</artifactId>
+			<version>3.0.4.RELEASE</version>
+		</dependency>
+
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

@@ -29,6 +29,16 @@ public class Order {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+//    @Column(name = "payment_id")
+//    private String paymentId;
+//
+//    @Column(name = "payment_status")
+//    private String paymentStatus;
+//
+//    @Column(name = "payment_date")
+//    private LocalDateTime paymentDate;
+
+
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
@@ -37,14 +47,6 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
-//    public Order(Long id, String status, LocalDateTime createdAt, Course course, User user) {
-//        this.id = id;
-//        this.status = status;
-//        this.createdAt = createdAt;
-//        this.course = course;
-//        this.user = user;
-//    }
 
     public Long getId() {
         return id;
@@ -85,4 +87,28 @@ public class Order {
     public void setUser(User user) {
         this.user = user;
     }
+
+//    public String getPaymentId() {
+//        return paymentId;
+//    }
+//
+//    public void setPaymentId(String paymentId) {
+//        this.paymentId = paymentId;
+//    }
+//
+//    public String getPaymentStatus() {
+//        return paymentStatus;
+//    }
+//
+//    public void setPaymentStatus(String paymentStatus) {
+//        this.paymentStatus = paymentStatus;
+//    }
+//
+//    public LocalDateTime getPaymentDate() {
+//        return paymentDate;
+//    }
+//
+//    public void setPaymentDate(LocalDateTime paymentDate) {
+//        this.paymentDate = paymentDate;
+//    }
 }
