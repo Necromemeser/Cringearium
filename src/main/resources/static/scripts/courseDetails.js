@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Обработка успешного создания заказа
                     console.log('Order created:', response);
 
-                    // Вариант 1: Перенаправление на страницу оплаты
-                    window.location.href = `/payment/process/${response.id}`;
+                    //Перенаправление на страницу оплаты
+                    window.location.href = response.paymentUrl;
 
                 },
                 error: function(xhr, status, error) {
