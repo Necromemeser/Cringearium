@@ -6,14 +6,17 @@ import com.edu.cringearium.entities.Order;
 import com.edu.cringearium.entities.course.Course;
 import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.repositories.OrderRepository;
+import com.edu.cringearium.repositories.course.CourseRepository;
 import com.edu.cringearium.repositories.user.UserRepository;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,9 +27,12 @@ public class OrderController {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
-    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
+    private final CourseRepository courseRepository;
+
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository, CourseRepository courseRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
     }
 
     // Получить все заказы
@@ -58,7 +64,7 @@ public class OrderController {
 
     // Создать новый заказ
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody OrderDTO dto) {
+    public ResponseEntity<?> createOrder(@RequestBody OrderDTO dto) {
         Order order = new Order();
         order.setStatus(dto.getStatus());
 
@@ -93,7 +99,87 @@ public class OrderController {
         order.setUser(user);
 
         Order savedOrder = orderRepository.save(order);
-        return ResponseEntity.ok(new OrderResponseDTO(savedOrder));
+
+        // 5. Получаем ТОЛЬКО цену курса для ЮКассы
+        Long amount = courseRepository.findPriceById(dto.getCourseId());
+        if (amount == null || amount <= 0) {
+            throw new RuntimeException("У курса не установлена корректная цена");
+        }
+
+        // 6. Получаем название курса (только если нужно для описания платежа)
+        String courseName = courseRepository.findCourseNameById(dto.getCourseId());
+
+
+        String paymentUrl = createYooKassaPayment(savedOrder.getId(), amount, "Оплата курса " + courseName);
+
+        return ResponseEntity.ok(Map.of(
+                "orderId", savedOrder.getId(),
+                "paymentUrl", paymentUrl
+        ));
+    }
+
+    private String createYooKassaPayment(Long orderId, Long amount, String description) {
+        try {
+            // 1. Настройка аутентификации
+            String shopId = "1063831";
+            String secretKey = "test_kwWnEmOA3laa3nk1UZpl5MRdUPaoalXLsDelJ2BCri0";
+            String auth = shopId + ":" + secretKey;
+            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
+
+            // TA FIGNYA
+            // уникальный ключ идемпотентности
+            String idempotenceKey = UUID.randomUUID().toString();
+
+            // 2. Настройка запроса
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", "Basic " + encodedAuth);
+            headers.set("Idempotence-Key", idempotenceKey);
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+            // AMOUNT
+            String amountForYooKassa = amount + ".00";
+
+
+
+            // 3. Подготовка тела запроса
+            Map<String, Object> request = new HashMap<>();
+            request.put("amount", Map.of(
+                    "value", amountForYooKassa,
+                    "currency", "RUB"
+            ));
+            request.put("description", description);
+            request.put("confirmation", Map.of(
+                    "type", "redirect",
+                    "return_url", "https://www.youtube.com/watch?v=dQw4w9WgXcQ" // + orderId
+            ));
+            request.put("capture", true);
+            request.put("metadata", Map.of(
+                    "orderId", orderId
+            ));
+
+            // 4. Отправка запроса
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+            ResponseEntity<Map> response = restTemplate.exchange(
+                    "https://api.yookassa.ru/v3/payments",
+                    HttpMethod.POST,
+                    entity,
+                    Map.class
+            );
+
+            // 5. Обработка ответа
+            if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
+                Map confirmation = (Map) response.getBody().get("confirmation");
+                return (String) confirmation.get("confirmation_url");
+            } else {
+                throw new RuntimeException("Ошибка при создании платежа: " + response.getStatusCode());
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при работе с ЮКассой: " + e.getMessage(), e);
+        }
     }
 
     // Обновить заказ
