@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
                         .requestMatchers("/api/**").permitAll() // delete later
-                        .requestMatchers("/", "/courses", "/registration").permitAll()
+                        .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
 //                        .requestMatchers("/api/ollama").authenticated()
 //                        .requestMatchers("/api/chats/**").authenticated()
                         .requestMatchers("/api/**").authenticated()

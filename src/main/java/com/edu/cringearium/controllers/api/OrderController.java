@@ -6,7 +6,11 @@ import com.edu.cringearium.entities.Order;
 import com.edu.cringearium.entities.course.Course;
 import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.repositories.OrderRepository;
+import com.edu.cringearium.repositories.user.UserRepository;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +22,11 @@ import java.util.stream.Collectors;
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
-    public OrderController(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     // Получить все заказы
@@ -61,7 +67,29 @@ public class OrderController {
         order.setCourse(course);
 
         User user = new User();
-        user.setId(dto.getUserId());
+
+        if (dto.getUserId() == null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            // Получаем имя пользователя из аутентификации
+            String username;
+            if (auth.getPrincipal() instanceof UserDetails) {
+                username = ((UserDetails) auth.getPrincipal()).getUsername();
+            } else {
+                username = auth.getPrincipal().toString();
+            }
+
+            // Находим пользователя в базе
+            User currentUser = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Current user not found"));
+
+            user.setId(currentUser.getId());
+        }
+        else
+        {
+            user.setId(dto.getUserId());
+        }
+
         order.setUser(user);
 
         Order savedOrder = orderRepository.save(order);

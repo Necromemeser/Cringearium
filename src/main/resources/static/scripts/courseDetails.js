@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Настраиваем модальное окно
             modalCourseName.textContent = course.courseName;
             modalCoursePrice.textContent = `${course.price} ₽`;
-            proceedToPayment.href = `/payment/${courseId}`;
+//            proceedToPayment.href = `/payment/${courseId}`;
         })
         .catch(error => {
             console.error('Ошибка загрузки курса:', error);
@@ -53,4 +53,66 @@ document.addEventListener('DOMContentLoaded', function() {
     enrollBtn.addEventListener('click', function() {
         paymentModal.show();
     });
+
+    // Обработчик кнопки "Войдите, чтобы оплатить" (если она существует)
+    const LogInToPayBtn = document.getElementById('LogInToPayBtn');
+    if (LogInToPayBtn) {
+        LogInToPayBtn.addEventListener('click', function() {
+            window.location.href = '/login';
+        });
+    }
+
+    // Обработчик кнопки "Оплатить курс"
+    const proceedToPaymentBtn = document.getElementById('proceedToPaymentBtn');
+    if (proceedToPaymentBtn) {
+        proceedToPaymentBtn.addEventListener('click', function() {
+
+            // Получаем ID курса из URL
+            const pathParts = window.location.pathname.split('/');
+            const courseId = pathParts[pathParts.length - 1];
+
+            // Показываем индикатор загрузки
+            const originalText = enrollBtn.innerHTML;
+            proceedToPaymentBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Обработка...';
+            proceedToPaymentBtn.disabled = true;
+
+            // Отправляем запрос на создание заказа
+            $.ajax({
+                url: '/api/orders',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    status: "pending",
+                    course_id: courseId,
+                    user_id: null
+                }),
+                success: function(response) {
+                    // Обработка успешного создания заказа
+                    console.log('Order created:', response);
+
+                    // Вариант 1: Перенаправление на страницу оплаты
+                    window.location.href = `/payment/process/${response.id}`;
+
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при создании заказа:', {
+                        status: status,
+                        error: error,
+                        response: xhr.responseText
+                    });
+
+                    // Восстанавливаем кнопку
+                    enrollBtn.innerHTML = originalText;
+                    enrollBtn.disabled = false;
+
+                    // Показываем ошибку пользователю
+                    const errorMessage = xhr.responseJSON && xhr.responseJSON.message
+                        ? xhr.responseJSON.message
+                        : 'Произошла ошибка при создании заказа';
+                    alert(errorMessage);
+                }
+            });
+        });
+    }
+
 });
