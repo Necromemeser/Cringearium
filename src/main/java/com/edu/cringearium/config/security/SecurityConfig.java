@@ -32,7 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
                         .requestMatchers("/api/**").permitAll() // delete later
-                        .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
+                        .requestMatchers("/", "/courses", "/courses/**", "/registration", "/payments/webhook").permitAll()
 //                        .requestMatchers("/api/ollama").authenticated()
 //                        .requestMatchers("/api/chats/**").authenticated()
                         .requestMatchers("/api/**").authenticated()
@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .loginPage("/login")            // Указываем кастомную страницу логина
                         .loginProcessingUrl("/perform_login") // URL для обработки формы
                         .defaultSuccessUrl("/profile")   // Перенаправление после успешного входа
-                        .failureUrl("/login?error=true") // Перенаправление при ошибке
+//                        .failureUrl("/login?error=true") // Перенаправление при ошибке
                         .permitAll()
 
                 )

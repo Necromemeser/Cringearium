@@ -1,5 +1,6 @@
 package com.edu.cringearium.controllers.api.course;
 
+import com.edu.cringearium.dto.course.CoursePageDTO;
 import com.edu.cringearium.entities.course.Course;
 import com.edu.cringearium.repositories.course.CourseRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,9 +31,12 @@ public class CourseController {
 
     // Получить все курсы
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
-        return new ResponseEntity<>(courses, HttpStatus.OK);
+    public ResponseEntity<List<CoursePageDTO>> getAllCourses() {
+        List<CoursePageDTO> courses = courseRepository.findAll()
+                .stream()
+                .map(CoursePageDTO::new)
+                .toList();
+        return ResponseEntity.ok(courses);
     }
 
     // Получить курс по ID
@@ -97,7 +101,7 @@ public class CourseController {
         return new ResponseEntity<>(courses, HttpStatus.OK);
     }
 
-    // 🔹 Загрузить изображение курса
+    // Загрузить изображение курса
     @PostMapping("/{id}/upload-image")
     public ResponseEntity<String> uploadCourseImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -115,7 +119,7 @@ public class CourseController {
         }
     }
 
-    // 🔹 Получить изображение курса
+    // Получить изображение курса
     @GetMapping("/{id}/image")
     public ResponseEntity<byte[]> getCourseImage(@PathVariable Long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -132,7 +136,7 @@ public class CourseController {
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 
-    // 🔹 Получить изображение курса в Base64
+    // Получить изображение курса в Base64
     @GetMapping("/{id}/image-base64")
     public ResponseEntity<String> getCourseImageBase64(@PathVariable Long id) {
         Optional<Course> courseOptional = courseRepository.findById(id);
@@ -144,6 +148,5 @@ public class CourseController {
         String base64Image = Base64.getEncoder().encodeToString(course.getCourseImage());
         return new ResponseEntity<>(base64Image, HttpStatus.OK);
     }
-
 
 }

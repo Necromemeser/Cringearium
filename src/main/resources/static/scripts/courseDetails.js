@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
             createdAtElement.textContent = new Date(course.createdAt).toLocaleDateString();
             priceElement.textContent = `${course.price} ₽`;
             courseDescriptionElement.textContent = course.courseDescription;
-//            courseImageElement.src = course.courseImage || 'https://via.placeholder.com/800x400';
+
             // Загрузка изображения
             courseImageElement.src = course.courseImage
                 ? `/api/courses/${course.id}/image`
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Настраиваем модальное окно
             modalCourseName.textContent = course.courseName;
             modalCoursePrice.textContent = `${course.price} ₽`;
-//            proceedToPayment.href = `/payment/${courseId}`;
+
         })
         .catch(error => {
             console.error('Ошибка загрузки курса:', error);

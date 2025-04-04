@@ -1,6 +1,6 @@
 package com.edu.cringearium.controllers.api.course;
 
-import com.edu.cringearium.dto.CourseDataTextDTO;
+import com.edu.cringearium.dto.course.CourseDataTextDTO;
 import com.edu.cringearium.entities.course.Course;
 import com.edu.cringearium.entities.course.CourseData;
 import com.edu.cringearium.repositories.course.CourseDataRepository;

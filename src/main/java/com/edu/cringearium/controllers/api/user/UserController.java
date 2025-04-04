@@ -1,12 +1,18 @@
 package com.edu.cringearium.controllers.api.user;
 
+import com.edu.cringearium.config.security.CustomUserDetails;
+import com.edu.cringearium.dto.course.UserCourseDTO;
 import com.edu.cringearium.dto.user.UserDTO;
 import com.edu.cringearium.dto.user.UserRegistrationDTO;
 import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.entities.user.UserRole;
 import com.edu.cringearium.repositories.user.UserRepository;
 import com.edu.cringearium.repositories.user.UserRoleRepository;
+import com.edu.cringearium.services.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +27,14 @@ public class UserController {
     private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository, UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
+    private final UserService userService;
+
+    public UserController(UserRepository userRepository, UserRoleRepository userRoleRepository,
+                          PasswordEncoder passwordEncoder, UserService userService) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -106,4 +116,15 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
+
+
+    // Для вывода курсов в личном кабинете
+    @GetMapping("/courses")
+    public ResponseEntity<List<UserCourseDTO>> getUserCourses(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        List<UserCourseDTO> courses = userService.getUserCourses(userDetails.getUser().getId());
+        return ResponseEntity.ok(courses);
+    }
+
+
+
 }

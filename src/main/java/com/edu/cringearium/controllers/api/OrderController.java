@@ -8,6 +8,7 @@ import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.repositories.OrderRepository;
 import com.edu.cringearium.repositories.course.CourseRepository;
 import com.edu.cringearium.repositories.user.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +29,12 @@ public class OrderController {
     private final UserRepository userRepository;
 
     private final CourseRepository courseRepository;
+
+    @Value("${SHOP_ID}")
+    private String shopId;
+
+    @Value("${SHOP_API_KEY}")
+    private String secretKey;
 
     public OrderController(OrderRepository orderRepository, UserRepository userRepository, CourseRepository courseRepository) {
         this.orderRepository = orderRepository;
@@ -73,6 +80,8 @@ public class OrderController {
         order.setCourse(course);
 
         User user = new User();
+
+
 
         if (dto.getUserId() == null) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -121,8 +130,6 @@ public class OrderController {
     private String createYooKassaPayment(Long orderId, Long amount, String description) {
         try {
             // 1. Настройка аутентификации
-            String shopId = "1063831";
-            String secretKey = "test_kwWnEmOA3laa3nk1UZpl5MRdUPaoalXLsDelJ2BCri0";
             String auth = shopId + ":" + secretKey;
             String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
 
@@ -153,7 +160,7 @@ public class OrderController {
             request.put("description", description);
             request.put("confirmation", Map.of(
                     "type", "redirect",
-                    "return_url", "https://www.youtube.com/watch?v=dQw4w9WgXcQ" // + orderId
+                    "return_url", "https://cringearium.loca.lt/profile" // + orderId
             ));
             request.put("capture", true);
             request.put("metadata", Map.of(

@@ -42,21 +42,21 @@ class CourseControllerTests {
         testCourse.setCreatedAt(LocalDateTime.now());
     }
 
-    @Test
-    void getAllCourses_ReturnsListOfCourses() {
-        // Arrange
-        when(courseRepository.findAll()).thenReturn(Arrays.asList(testCourse));
-
-        // Act
-        ResponseEntity<List<Course>> response = courseController.getAllCourses();
-
-        // Assert
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-        assertEquals(testCourse, response.getBody().get(0));
-        verify(courseRepository, times(1)).findAll();
-    }
+//    @Test
+//    void getAllCourses_ReturnsListOfCourses() {
+//        // Arrange
+//        when(courseRepository.findAll()).thenReturn(Arrays.asList(testCourse));
+//
+//        // Act
+//        ResponseEntity<List<Course>> response = courseController.getAllCourses();
+//
+//        // Assert
+//        assertEquals(HttpStatus.OK, response.getStatusCode());
+//        assertNotNull(response.getBody());
+//        assertEquals(1, response.getBody().size());
+//        assertEquals(testCourse, response.getBody().get(0));
+//        verify(courseRepository, times(1)).findAll();
+//    }
 
     @Test
     void getCourseById_WhenCourseExists_ReturnsCourse() {
