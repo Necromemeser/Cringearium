@@ -1,4 +1,4 @@
-package com.edu.cringearium.dto;
+package com.edu.cringearium.dto.course;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
