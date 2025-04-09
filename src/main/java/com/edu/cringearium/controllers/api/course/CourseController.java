@@ -4,6 +4,7 @@ import com.edu.cringearium.dto.course.CoursePageDTO;
 import com.edu.cringearium.entities.course.Course;
 import com.edu.cringearium.repositories.course.CourseRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ public class CourseController {
     }
 
     // Получить курс по ID
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
         Optional<Course> course = courseRepository.findById(id);
