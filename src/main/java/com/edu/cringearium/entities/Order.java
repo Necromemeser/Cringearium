@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "order_table", schema = "cringearium")
+@Table(name = "order_table")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,15 +28,6 @@ public class Order {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
-
-//    @Column(name = "payment_id")
-//    private String paymentId;
-//
-//    @Column(name = "payment_status")
-//    private String paymentStatus;
-//
-//    @Column(name = "payment_date")
-//    private LocalDateTime paymentDate;
 
 
     @ManyToOne
@@ -88,27 +79,4 @@ public class Order {
         this.user = user;
     }
 
-//    public String getPaymentId() {
-//        return paymentId;
-//    }
-//
-//    public void setPaymentId(String paymentId) {
-//        this.paymentId = paymentId;
-//    }
-//
-//    public String getPaymentStatus() {
-//        return paymentStatus;
-//    }
-//
-//    public void setPaymentStatus(String paymentStatus) {
-//        this.paymentStatus = paymentStatus;
-//    }
-//
-//    public LocalDateTime getPaymentDate() {
-//        return paymentDate;
-//    }
-//
-//    public void setPaymentDate(LocalDateTime paymentDate) {
-//        this.paymentDate = paymentDate;
-//    }
 }

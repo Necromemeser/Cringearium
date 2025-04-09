@@ -84,29 +84,6 @@
                 <a href="/courses" class="btn btn-primary mt-2">Перейти к курсам</a>
             </div>
         </div>
-
-        <!-- Статистика -->
-        <div class="card shadow-sm mb-5">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Моя статистика</h5>
-            </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="display-6 fw-bold text-primary" th:text="${completedCoursesCount ?: 0}">0</div>
-                        <small class="text-muted">Завершенных курсов</small>
-                    </div>
-                    <div class="col-md-4 mb-3 mb-md-0">
-                        <div class="display-6 fw-bold text-primary" th:text="${totalStudyHours ?: 0}">0</div>
-                        <small class="text-muted">Часов обучения</small>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="display-6 fw-bold text-primary" th:text="${certificatesCount ?: 0}">0</div>
-                        <small class="text-muted">Полученных сертификатов</small>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </main>
 
