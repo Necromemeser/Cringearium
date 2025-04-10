@@ -31,18 +31,17 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
-                        .requestMatchers("/api/**").permitAll() // delete later
                         .requestMatchers("/", "/courses", "/courses/**", "/registration", "/payments/webhook").permitAll()
-//                        .requestMatchers("/api/ollama").authenticated()
-//                        .requestMatchers("/api/chats/**").authenticated()
+                        .requestMatchers("/info/**").permitAll()
+                        .requestMatchers("/api/ollama").authenticated()
+                        .requestMatchers("/api/chats/**").authenticated()
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/profile").authenticated()
                         .requestMatchers("/**").authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")            // Указываем кастомную страницу логина
                         .loginProcessingUrl("/perform_login") // URL для обработки формы
-                        .defaultSuccessUrl("/profile")   // Перенаправление после успешного входа
-//                        .failureUrl("/login?error=true") // Перенаправление при ошибке
+                        .defaultSuccessUrl("/profile", true)   // Перенаправление после успешного входа
+                        .failureUrl("/login?error=true") // Перенаправление при ошибке
                         .permitAll()
 
                 )
