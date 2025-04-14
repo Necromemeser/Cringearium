@@ -13,7 +13,6 @@ public class ChatDTO {
         this.createdAt = createdAt;
     }
 
-    // Getters and setters
     public Long getId() {
         return id;
     }

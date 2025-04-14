@@ -21,7 +21,6 @@ public class UserDTO {
     @JsonProperty("user_role_id")
     private Long userRoleId;
 
-    // Конструкторы
     public UserDTO() {}
 
     public UserDTO(String username, String email, String passwordHash, byte[] profilePic, Long userRoleId) {
@@ -32,7 +31,6 @@ public class UserDTO {
         this.userRoleId = userRoleId;
     }
 
-    // Геттеры и сеттеры
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 

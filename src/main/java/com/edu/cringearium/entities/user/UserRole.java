@@ -17,7 +17,6 @@ public class UserRole {
     @Column(name = "description", nullable = false)
     private String description;
 
-    // Конструкторы
     public UserRole() {}
 
     public UserRole(String roleName, String description) {
@@ -25,7 +24,6 @@ public class UserRole {
         this.description = description;
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }

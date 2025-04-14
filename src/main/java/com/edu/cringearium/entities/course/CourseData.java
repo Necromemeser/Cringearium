@@ -30,11 +30,6 @@ public class CourseData {
     @JoinColumn(name = "course_id", nullable = false)
     private Course course;
 
-//    public CourseData(Long id, byte[] content, Course course) {
-//        this.id = id;
-//        this.content = content;
-//        this.course = course;
-//    }
 
     public Long getId() {
         return id;

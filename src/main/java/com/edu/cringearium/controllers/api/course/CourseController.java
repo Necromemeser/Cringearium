@@ -14,10 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -38,6 +37,24 @@ public class CourseController {
                 .map(CoursePageDTO::new)
                 .toList();
         return ResponseEntity.ok(courses);
+    }
+
+    @GetMapping("/admin")
+    public List<Map<String, Object>> getAllCoursesForAdmin() {
+        return courseRepository.findAll().stream()
+                .map(course -> {
+                    Map<String, Object> courseMap = new HashMap<>();
+                    courseMap.put("id", course.getId());
+                    courseMap.put("courseName", course.getCourseName());
+                    courseMap.put("courseTheme", course.getCourseTheme());
+                    courseMap.put("createdAt", course.getCreatedAt());
+                    courseMap.put("price", course.getPrice());
+                    courseMap.put("courseDescription", course.getCourseDescription());
+                    courseMap.put("courseImage", course.getCourseImage());
+
+                    return courseMap;
+                })
+                .collect(Collectors.toList());
     }
 
     // Получить курс по ID

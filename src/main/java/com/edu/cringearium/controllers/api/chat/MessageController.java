@@ -38,21 +38,17 @@ public class MessageController {
     // Отправить сообщение
     @PostMapping("/send")
     public ResponseEntity<Message> sendMessage(
-            @RequestParam(required = false) Long userId, // userId теперь может быть null для ИИ
+            @RequestParam(required = false) Long userId,
             @RequestParam Long chatId,
             @RequestBody byte[] content,
-            @RequestParam(required = false, defaultValue = "false") boolean isAiResponse) { // Индикатор для ИИ
+            @RequestParam(required = false, defaultValue = "false") boolean isAiResponse) {
 
-        // Если это не сообщение от ИИ, проверяем наличие userId
-//        if (!isAiResponse && (userId == null || userRepository.findById(userId).isEmpty())) {
-//            return ResponseEntity.badRequest().build(); // Если userId отсутствует, ошибка
-//        }
 
         if (!isAiResponse) {
-            if (userId == null) {  // Сначала проверяем, что userId вообще передан
+            if (userId == null) {
                 return ResponseEntity.badRequest().build();
             }
-            if (userRepository.findById(userId).isEmpty()) { // Только потом ищем в БД
+            if (userRepository.findById(userId).isEmpty()) {
                 return ResponseEntity.badRequest().build();
             }
         }
@@ -60,7 +56,7 @@ public class MessageController {
         Optional<Chat> chatOpt = chatRepository.findById(chatId);
 
         if (chatOpt.isEmpty()) {
-            return ResponseEntity.badRequest().build(); // Если чат не найден, ошибка
+            return ResponseEntity.badRequest().build();
         }
 
         User user = null;

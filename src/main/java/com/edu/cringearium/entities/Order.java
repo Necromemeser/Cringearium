@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_table")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {

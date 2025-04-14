@@ -14,4 +14,7 @@ public class CoursePageController {
 
     @GetMapping("/courses/{id}")
     public String coursePage(Model model) {return "coursePage";}
+
+    @GetMapping("/courses/{id}/study")
+    public String studyPage(Model model) {return "study";}
 }

@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <p class="card-text text-muted">${course.courseTheme || 'Описание отсутствует'}</p>
                     </div>
                     <div class="card-footer bg-transparent d-flex justify-content-between">
-                        <a href="/courses/${course.id}" class="btn btn-sm btn-outline-primary">Продолжить</a>
+                        <a href="/courses/${course.id}/study" class="btn btn-sm btn-outline-primary">Продолжить</a>
                     </div>
                 </div>
             `;

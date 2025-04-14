@@ -16,7 +16,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
     @Query("SELECT c.price FROM Course c WHERE c.id = :courseId")
     Long findPriceById(@Param("courseId") Long courseId);
 
-    // Получаем только название курса по ID
+    // Получаем название курса по ID
     @Query("SELECT c.courseName FROM Course c WHERE c.id = :courseId")
     String findCourseNameById(@Param("courseId") Long courseId);
 }
