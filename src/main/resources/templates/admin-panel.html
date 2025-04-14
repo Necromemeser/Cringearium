@@ -1,10 +1,263 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cringearium - Административная панель</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/styles/styles.css}" rel="stylesheet">
+    <link th:href="@{/styles/adminPanelStyle.css}" rel="stylesheet">
 </head>
 <body>
+
+<!-- Шапка -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Основное содержимое -->
+<main class="container py-5">
+    <div class="card">
+        <div class="card-header bg-white border-bottom-0">
+            <ul class="nav nav-tabs card-header-tabs" id="adminTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="users-tab" data-bs-toggle="tab"
+                            data-bs-target="#users-tab-pane" type="button" role="tab">
+                        <i class="fas fa-users me-2"></i>Пользователи
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="courses-tab" data-bs-toggle="tab"
+                            data-bs-target="#courses-tab-pane" type="button" role="tab">
+                        <i class="fas fa-book me-2"></i>Курсы
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="card-body">
+            <div class="tab-content" id="adminTabsContent">
+                <!-- Вкладка пользователей -->
+                <div class="tab-pane fade show active" id="users-tab-pane" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Управление пользователями</h4>
+                        <button class="btn btn-primary" id="addUserBtn">
+                            <i class="fas fa-plus me-1"></i>Добавить пользователя
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="usersTable" class="table table-hover table-striped w-100">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Аватар</th>
+                                <th>Имя пользователя</th>
+                                <th>Email</th>
+                                <th>Роль</th>
+                                <th>Курсы</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Данные будут загружены через JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Вкладка курсов -->
+                <div class="tab-pane fade" id="courses-tab-pane" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>Управление курсами</h4>
+                        <button class="btn btn-primary" id="addCourseBtn">
+                            <i class="fas fa-plus me-1"></i>Добавить курс
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="coursesTable" class="table table-hover table-striped w-100">
+                            <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Изображение</th>
+                                <th>Название</th>
+                                <th>Тема</th>
+                                <th>Цена</th>
+                                <th>Дата создания</th>
+                                <th>Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Данные будут загружены через JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно пользователей -->
+    <div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalTitle">Редактирование пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <input type="hidden" id="userId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="username" class="form-label">Имя пользователя</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">Пароль</label>
+                                <input type="password" class="form-control" id="password">
+                                <small class="text-muted">Оставьте пустым, если не хотите менять пароль</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="userRole" class="form-label">Роль</label>
+                                <select class="form-select" id="userRole" required>
+                                    <option value="ADMIN">Администратор</option>
+                                    <option value="TEACHER">Преподаватель</option>
+                                    <option value="STUDENT" selected>Студент</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="profilePic" class="form-label">Аватар</label>
+                            <input class="form-control" type="file" id="profilePic" accept="image/*">
+                            <img id="userImagePreview" src="#" alt="Превью аватара"
+                                 style="max-width: 100px; max-height: 100px; display: none; margin-top: 10px;">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveUserBtn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подтверждение удаления пользователя -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить этого пользователя? Это действие нельзя отменить.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно курсов -->
+    <div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="courseModalTitle">Редактирование курса</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="courseForm">
+                        <input type="hidden" id="courseId">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="courseName" class="form-label">Название курса</label>
+                                <input type="text" class="form-control" id="courseName" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="courseTheme" class="form-label">Тема курса</label>
+                                <input type="text" class="form-control" id="courseTheme" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="coursePrice" class="form-label">Цена (в рублях)</label>
+                                <input type="number" class="form-control" id="coursePrice" min="0" value="0">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="courseImage" class="form-label">Изображение курса</label>
+                                <input class="form-control" type="file" id="courseImage" accept="image/*">
+                                <img id="courseImagePreview" src="#" alt="Превью изображения"
+                                     style="max-width: 100px; max-height: 100px; display: none; margin-top: 10px;">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="courseDescription" class="form-label">Описание курса</label>
+                            <textarea class="form-control" id="courseDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="saveCourseBtn">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подтверждение удаления курса -->
+    <div class="modal fade" id="confirmDeleteCourseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Вы уверены, что хотите удалить этот курс? Это действие нельзя отменить.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteCourseBtn">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Подключение скриптов -->
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+<!-- Custom JS -->
+<script src="/scripts/adminPanelUserScript.js"></script>
+<script src="/scripts/adminPanelCourseScript.js"></script>
 
 </body>
 </html>

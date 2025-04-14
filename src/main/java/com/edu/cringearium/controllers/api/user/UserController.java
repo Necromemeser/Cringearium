@@ -6,9 +6,12 @@ import com.edu.cringearium.dto.user.UserDTO;
 import com.edu.cringearium.dto.user.UserRegistrationDTO;
 import com.edu.cringearium.entities.user.User;
 import com.edu.cringearium.entities.user.UserRole;
+import com.edu.cringearium.entities.course.Course;
+
 import com.edu.cringearium.repositories.user.UserRepository;
 import com.edu.cringearium.repositories.user.UserRoleRepository;
 import com.edu.cringearium.services.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,8 +19,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -37,10 +43,35 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Transactional
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<Map<String, Object>> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> {
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("id", user.getId());
+                    userMap.put("username", user.getUsername());
+                    userMap.put("email", user.getEmail());
+                    userMap.put("profilePic", user.getProfilePic());
+
+                    // Добавляем только название роли
+                    if (user.getUserRole() != null) {
+                        userMap.put("userRole", user.getUserRole().getRoleName());
+                    }
+
+                    // Добавляем названия курсов пользователя
+                    if (user.getCourses() != null && !user.getCourses().isEmpty()) {
+                        List<String> courseNames = user.getCourses().stream()
+                                .map(Course::getCourseName)
+                                .collect(Collectors.toList());
+                        userMap.put("courses", courseNames);
+                    }
+
+                    return userMap;
+                })
+                .collect(Collectors.toList());
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {

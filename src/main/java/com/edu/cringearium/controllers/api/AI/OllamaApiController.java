@@ -53,10 +53,6 @@ public class OllamaApiController {
                     .collect(Collectors.toList());
         }
 
-
-        // Добавляем текущее сообщение пользователя
-//        formattedHistory.add("Сообщение пользователя: " + input);
-
         // Создаём поток ответа от AI
         Flux<String> responseStream = chatClient.prompt()
                 .user(String.join("\n", formattedHistory)) // Объединяем историю в одну строку
@@ -83,60 +79,3 @@ public class OllamaApiController {
                 .content();
     }
 }
-
-//import com.edu.cringearium.entities.chat.Message;
-//import com.edu.cringearium.services.MessageService;
-//import org.springframework.ai.chat.client.ChatClient;
-//import org.springframework.ai.chat.messages.MessageType;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//import reactor.core.publisher.Flux;
-//
-//import java.nio.charset.StandardCharsets;
-//import java.util.List;
-//
-//
-//@RestController
-//public class OllamaApiController {
-//
-//    private final ChatClient chatClient;
-//    private final MessageService messageService;
-//
-//    public OllamaApiController(ChatClient chatClient, MessageService messageService) {
-//        this.chatClient = chatClient;
-//        this.messageService = messageService;
-//    }
-//
-//
-//
-//    @PostMapping("/api/ollama")
-//    public Flux<String> ollama(@RequestParam Long chatId, @RequestParam String input) {
-//        // Сохранение пользовательского сообщения
-//        messageService.saveUserMessage(chatId, input);
-//
-//        // Создаём поток ответа от AI
-//        Flux<String> responseStream = chatClient.prompt()
-//                .user(input)
-//                .stream()
-//                .content()
-//                .share(); // Дублируем поток для сохранения и передачи клиенту
-//
-//        // Сохранение полного ответа в бд
-//        responseStream.collectList()
-//                .map(responseList -> String.join("", responseList))
-//                .doOnSuccess(fullResponse -> messageService.saveAiResponse(chatId, fullResponse))
-//                .subscribe(); // Запускаем сбор полного ответа в фоновом режиме
-//
-//        return responseStream; // Отправляем поток клиенту
-//    }
-//
-//    @GetMapping("/api/ollama")
-//    public Flux<String> ollama(@RequestParam String input) {
-//        return chatClient.prompt()
-//                .user(input)
-//                .stream()
-//                .content();
-//    }
-//}

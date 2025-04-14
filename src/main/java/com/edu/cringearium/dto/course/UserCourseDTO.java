@@ -13,7 +13,6 @@ public class UserCourseDTO {
 
     private LocalDateTime createdAt;
 
-//    private byte[] courseImage;
 
     private boolean hasImage;
 
@@ -29,7 +28,6 @@ public class UserCourseDTO {
             this.hasImage = true;
         }
         else this.hasImage = false;
-//        this.courseImage = course.getCourseImage();
     }
 
 
@@ -82,11 +80,4 @@ public class UserCourseDTO {
         this.hasImage = hasImage;
     }
 
-    //    public byte[] getCourseImage() {
-//        return courseImage;
-//    }
-
-//    public void setCourseImage(byte[] courseImage) {
-//        this.courseImage = courseImage;
-//    }
 }

@@ -43,7 +43,7 @@ public class Message {
         this.timestamp = LocalDateTime.now();
     }
 
-    // Геттеры и сеттеры
+
     public Long getId() { return id; }
     public byte[] getContent() { return content; }
     public LocalDateTime getTimestamp() { return timestamp; }

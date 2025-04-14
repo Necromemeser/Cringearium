@@ -27,8 +27,6 @@ public class UserRegistrationDTO {
     private String matchingPassword;
 
 
-    // Геттеры и сеттеры
-
     public String getUsername() {
         return username;
     }

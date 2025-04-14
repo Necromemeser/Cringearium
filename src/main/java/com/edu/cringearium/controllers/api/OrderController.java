@@ -109,13 +109,11 @@ public class OrderController {
 
         Order savedOrder = orderRepository.save(order);
 
-        // 5. Получаем ТОЛЬКО цену курса для ЮКассы
         Long amount = courseRepository.findPriceById(dto.getCourseId());
         if (amount == null || amount <= 0) {
             throw new RuntimeException("У курса не установлена корректная цена");
         }
 
-        // 6. Получаем название курса (только если нужно для описания платежа)
         String courseName = courseRepository.findCourseNameById(dto.getCourseId());
 
 
@@ -129,15 +127,14 @@ public class OrderController {
 
     private String createYooKassaPayment(Long orderId, Long amount, String description) {
         try {
-            // 1. Настройка аутентификации
+            // Настройка аутентификации
             String auth = shopId + ":" + secretKey;
             String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes());
 
-            // TA FIGNYA
             // уникальный ключ идемпотентности
             String idempotenceKey = UUID.randomUUID().toString();
 
-            // 2. Настройка запроса
+            // Настройка запроса
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -146,12 +143,12 @@ public class OrderController {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-            // AMOUNT
+
             String amountForYooKassa = amount + ".00";
 
 
 
-            // 3. Подготовка тела запроса
+            // Подготовка тела запроса
             Map<String, Object> request = new HashMap<>();
             request.put("amount", Map.of(
                     "value", amountForYooKassa,
@@ -167,7 +164,7 @@ public class OrderController {
                     "orderId", orderId
             ));
 
-            // 4. Отправка запроса
+            // Отправка запроса
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
             ResponseEntity<Map> response = restTemplate.exchange(
                     "https://api.yookassa.ru/v3/payments",
@@ -176,7 +173,7 @@ public class OrderController {
                     Map.class
             );
 
-            // 5. Обработка ответа
+            // Обработка ответа
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 Map confirmation = (Map) response.getBody().get("confirmation");
                 return (String) confirmation.get("confirmation_url");

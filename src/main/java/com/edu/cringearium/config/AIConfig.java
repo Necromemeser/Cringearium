@@ -19,11 +19,3 @@ public class AIConfig {
                 .build();
     }
 }
-
-//    @Bean
-//    public ChatClient ollamaChatClient(OllamaChatModel chatModel) {
-//        return ChatClient.create(chatModel);
-//    }
-//}
-
-

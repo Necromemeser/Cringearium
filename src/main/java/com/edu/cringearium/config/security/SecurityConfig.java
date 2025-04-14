@@ -36,9 +36,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/ollama").authenticated()
                         .requestMatchers("/api/chats/**").authenticated()
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/**").authenticated())
+                        .requestMatchers("/**").authenticated()
+                        .requestMatchers("/admin-panel").hasRole("Admin"))
                 .formLogin(form -> form
-                        .loginPage("/login")            // Указываем кастомную страницу логина
+                        .loginPage("/login")            // Кастомная страница логина
                         .loginProcessingUrl("/perform_login") // URL для обработки формы
                         .defaultSuccessUrl("/profile", true)   // Перенаправление после успешного входа
                         .failureUrl("/login?error=true") // Перенаправление при ошибке

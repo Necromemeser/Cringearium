@@ -22,7 +22,6 @@ document.getElementById('avatarUpload').addEventListener('change', function(e) {
                 }
             }
 
-            // Здесь можно добавить AJAX-запрос для сохранения изображения
         };
 
         reader.readAsDataURL(e.target.files[0]);
