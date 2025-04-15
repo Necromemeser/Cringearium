@@ -29,16 +29,30 @@ public class CourseController {
         this.courseRepository = courseRepository;
     }
 
-    // Получить все курсы
+    @Transactional
     @GetMapping
-    public ResponseEntity<List<CoursePageDTO>> getAllCourses() {
-        List<CoursePageDTO> courses = courseRepository.findAll()
-                .stream()
+    public ResponseEntity<List<CoursePageDTO>> getAllCourses(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String theme
+    ) {
+        List<Course> courses;
+
+        if (name != null && theme != null) {
+            courses = courseRepository.findByCourseNameContainingIgnoreCaseAndCourseThemeIgnoreCase(name, theme);
+        } else if (name != null) {
+            courses = courseRepository.findByCourseNameContainingIgnoreCase(name);
+        } else if (theme != null) {
+            courses = courseRepository.findByCourseThemeContainingIgnoreCase(theme);
+        } else {
+            courses = courseRepository.findAll();
+        }
+
+        List<CoursePageDTO> result = courses.stream()
                 .map(CoursePageDTO::new)
                 .toList();
-        return ResponseEntity.ok(courses);
-    }
 
+        return ResponseEntity.ok(result);
+    }
     @GetMapping("/admin")
     public List<Map<String, Object>> getAllCoursesForAdmin() {
         return courseRepository.findAll().stream()
