@@ -74,6 +74,8 @@ function loadCourses() {
         url += `?${params.join('&')}`;
     }
 
+    console.log(currentFilters.theme)
+
     fetch(url)
         .then(response => response.json())
         .then(courses => {
@@ -168,7 +170,7 @@ function displayCourses(courses) {
                             <span class="${priceClass}">${priceText}</span>
                         </div>
                         <h5 class="card-title">${course.courseName}</h5>
-                        <p class="card-text text-muted">${course.description || 'Описание курса отсутствует'}</p>
+                        <p class="card-text text-muted">${course.courseDescription || 'Описание курса отсутствует'}</p>
                     </div>
                     <div class="card-footer bg-transparent">
                         <a href="/courses/${course.id}" class="btn btn-sm btn-primary">Подробнее</a>

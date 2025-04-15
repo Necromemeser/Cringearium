@@ -30,9 +30,6 @@ public class ProfileController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         model.addAttribute("user", user);
-        // Мб придется добавить другие необходимые атрибуты, например:
-        // model.addAttribute("userCourses", courseService.getUserCourses(user.getId()));
-        // model.addAttribute("completedCoursesCount", ...);
 
         return "profile";
     }
