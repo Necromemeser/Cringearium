@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
-@Table(name = "chat", schema = "cringearium")
+@Table(name = "chat")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,7 +30,6 @@ public class Chat {
     @ManyToMany
     @JoinTable(
             name = "user_chat",
-            schema = "cringearium",
             joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )

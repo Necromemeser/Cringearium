@@ -22,7 +22,7 @@ public class Message {
     private LocalDateTime timestamp = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true) // Теперь может быть NULL
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @ManyToOne

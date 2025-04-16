@@ -35,7 +35,6 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_chat",
-            schema = "cringearium",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "chat_id")
     )
@@ -44,7 +43,6 @@ public class User {
     @ManyToMany
     @JoinTable(
             name = "user_course",
-            schema = "cringearium",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id")
     )

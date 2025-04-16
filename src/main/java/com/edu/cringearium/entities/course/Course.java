@@ -45,7 +45,6 @@ public class Course {
     @ManyToMany
     @JoinTable(
             name = "user_course",
-            schema = "cringearium",
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
