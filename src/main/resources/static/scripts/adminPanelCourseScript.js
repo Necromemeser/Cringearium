@@ -18,7 +18,7 @@ $(document).ready(function() {
                         if (data) {
                             return `<img src="data:image/jpeg;base64,${data}" class="course-img-thumb">`;
                         }
-                        return `<img src="/images/default-course.jpg" class="course-img-thumb">`;
+                        return `<img src="/images/default-course.png" class="course-img-thumb">`;
                     }
                 },
                 { data: 'courseName' },

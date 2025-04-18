@@ -154,7 +154,7 @@ function displayCourses(courses) {
         // Загрузка изображения
         const imageSrc = course.courseImage
             ? `/api/courses/${course.id}/image`
-            : `/images/default-course.jpg`;
+            : `/images/default-course.png`;
 
         console.log(course)
         console.log(imageSrc)
@@ -163,7 +163,7 @@ function displayCourses(courses) {
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card h-100 shadow-sm course-card">
                     <img src="${imageSrc}" class="card-img-top" alt="${course.courseName}"
-                    onerror="this.onerror=null; this.src='/images/default-course.jpg'">
+                    onerror="this.onerror=null; this.src='/images/default-course.png'">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start mb-2">
                             <span class="badge bg-primary">${course.courseTheme}</span>

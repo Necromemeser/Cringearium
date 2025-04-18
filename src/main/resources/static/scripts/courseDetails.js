@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Загрузка изображения
             courseImageElement.src = course.courseImage
                 ? `/api/courses/${course.id}/image`
-                : `/images/default-course.jpg`;
+                : `/images/default-course.png`;
             usersCountElement.textContent = course.users ? course.users.length : 0;
 
             // Настраиваем модальное окно

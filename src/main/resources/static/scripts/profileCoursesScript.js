@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const imageSrc = course.hasImage
                 ? `/api/courses/${course.id}/image`
-                : `/images/default-course.jpg`;
+                : `/images/default-course.png`;
 
             const card = document.createElement("div");
             card.className = "col-md-6 col-lg-4";

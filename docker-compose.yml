@@ -7,11 +7,12 @@ services:
     container_name: myapp-postgres
     environment:
       POSTGRES_INITDB_SCHEMA: cringearium
-      POSTGRES_INITDB_SCHEMA_GRANT: cringeadmin
-      POSTGRES_DB: cringearium
-      POSTGRES_USER: cringeadmin
-      POSTGRES_PASSWORD: 123
+      POSTGRES_INITDB_SCHEMA_GRANT: postgres
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
@@ -23,7 +24,7 @@ services:
       timeout: 5s
       retries: 10
 
-  # 2. Ваше Spring Boot приложение
+  # 2. Spring Boot приложение
   app:
     build: .
     container_name: myapp-backend
@@ -31,10 +32,11 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/cringearium
-      SPRING_DATASOURCE_USERNAME: cringeadmin
-      SPRING_DATASOURCE_PASSWORD: 123
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+      OLLAMA_BASE_URL: http://ollama:11434
     ports:
       - "8080:8080"
     networks:
@@ -50,9 +52,11 @@ services:
       - 11434/tcp
     ports:
       - "11434:11434"
+    networks:
+      - myapp-network
     healthcheck:
       test: ollama --version || exit 1
-    entrypoint: /root/entrypoint.sh
+    entrypoint: ["/bin/sh", "/root/entrypoint.sh"]
     volumes:
       - ./ollama:/root/.ollama
       - ./entrypoint.sh:/root/entrypoint.sh
