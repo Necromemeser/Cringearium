@@ -245,7 +245,7 @@ $(document).ready(function() {
             );
         });
 
-        fetch(`/api/ollama?chatId=${activeChatId}&input=${encodeURIComponent(userInput)}`, {
+        fetch(`/api/deepseek?chatId=${activeChatId}&input=${encodeURIComponent(userInput)}`, {
             method: 'POST'
         }).then(response => {
             if (!response.ok) {
