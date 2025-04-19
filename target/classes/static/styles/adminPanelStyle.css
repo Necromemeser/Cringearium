@@ -1,0 +1,53 @@
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.badge-role {
+    font-size: 0.8em;
+    padding: 0.35em 0.65em;
+}
+.course-badge {
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+}
+.action-buttons .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+#usersTable {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+.card {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+}
+
+/* Стили для вкладок */
+.nav-tabs .nav-link {
+    color: #495057;
+    font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: #fff;
+    border-bottom-color: #fff;
+}
+
+/* Стили для изображений курсов */
+.course-img-thumb {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Стили для бейджей пользователей */
+.user-badge {
+    margin-right: 0.3em;
+    margin-bottom: 0.3em;
+    font-size: 0.8em;
+    display: inline-block;
+}

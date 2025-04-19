@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cringearium - Каталог курсов</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link th:href="@{/styles/styles.css}" rel="stylesheet">
+    <link th:href="@{/styles/courseDetailPageStyle.css}" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Основное содержимое -->
+<main class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Заголовок с кнопкой "Назад" -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a href="/courses" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Назад к курсам
+                    </a>
+                </div>
+
+                <!-- Карточка курса -->
+                <div class="card mb-4">
+                    <img id="courseImage" class="card-img-top" src="" alt="Course Image" style="height: 300px; object-fit: cover;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h2 id="courseName" class="card-title mb-1"></h2>
+                                <span id="courseTheme" class="badge bg-primary"></span>
+                            </div>
+                            <div class="text-end">
+                                <div id="price" class="h4 text-success mb-2"></div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="mb-4">
+                            <h5>Описание курса</h5>
+                            <p id="courseDescription" class="card-text"></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">Дата создания: <span id="createdAt"></span></small>
+                            <button id="enrollBtn" class="btn btn-primary btn-lg">Записаться на курс</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для оплаты -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Оплата курса</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="paymentError" class="alert alert-danger d-none"></div>
+                    <p>Вы собираетесь записаться на курс <strong id="modalCourseName"></strong></p>
+                    <p>Стоимость: <strong id="modalCoursePrice"></strong></p>
+                    <div class="d-grid gap-2">
+                        <button id="LogInToPayBtn" class="btn btn-success" sec:authorize="!isAuthenticated()">
+                            Войдите, чтобы оплатить
+                        </button>
+                        <button id="proceedToPaymentBtn" class="btn btn-success" sec:authorize="isAuthenticated()">
+                            Перейти к оплате
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Custom JS -->
+<script th:src="@{/scripts/courseDetails.js}"></script>
+</body>
+</html>
