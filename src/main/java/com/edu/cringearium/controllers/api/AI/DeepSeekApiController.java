@@ -22,7 +22,7 @@ import java.util.Objects;
 @RestController
 public class DeepSeekApiController {
 
-    private final WebClient deepseekClient; // или RestClient
+    private final WebClient deepseekClient;
     private final MessageService messageService;
 
     public DeepSeekApiController(WebClient deepseekClient, MessageService messageService) {
@@ -80,7 +80,7 @@ public class DeepSeekApiController {
                 })
                 .subscribe();
 
-        connectableFlux.connect(); // ОБЯЗАТЕЛЬНО!
+        connectableFlux.connect();
 
         return connectableFlux;
     }
@@ -88,7 +88,6 @@ public class DeepSeekApiController {
 
     // Метод для парсинга JSON и извлечения текста
     private String parseChunkContent(String jsonChunk) {
-        System.out.println("Парсим джейсончик");
         try {
             JsonNode node = new ObjectMapper().readTree(jsonChunk);
             JsonNode choices = node.path("choices");

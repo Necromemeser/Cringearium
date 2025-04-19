@@ -1,67 +1,15 @@
 $(document).ready(function() {
-    // Функция для создания AI-сообщения с поддержкой think-блоков
+    // Функция для создания сообщения от ИИ
     function createAiMessage(content, isOldMessage = false) {
         const aiMessageEl = $('<div class="message ai-message"><strong>Кринжик:</strong> </div>');
-        const mainTextEl = $('<div class="ai-main-text"></div>');
-        const thinkContainer = $('<div class="think-container"></div>');
-        const thinkToggle = $('<button class="think-toggle">📊 Показать рассуждения</button>');
-        const thinkContent = $('<div class="think-content" style="display:none"></div>');
+        const mainTextEl = $('<span class="ai-text"></span>');
 
-        let inThinkBlock = false;
-        let remainingContent = content;
-        let hasThinkContent = false;
-
-        // Парсим контент для выделения think-блоков
-        while (remainingContent.length > 0) {
-            if (!inThinkBlock) {
-                const thinkStart = remainingContent.indexOf('<think>');
-                if (thinkStart >= 0) {
-                    mainTextEl.append(remainingContent.substring(0, thinkStart));
-                    inThinkBlock = true;
-                    remainingContent = remainingContent.substring(thinkStart + 7);
-                    hasThinkContent = true;
-                } else {
-                    mainTextEl.append(remainingContent);
-                    remainingContent = '';
-                }
-            } else {
-                const thinkEnd = remainingContent.indexOf('</think>');
-                if (thinkEnd >= 0) {
-                    thinkContent.append(remainingContent.substring(0, thinkEnd));
-                    remainingContent = remainingContent.substring(thinkEnd + 8);
-                    inThinkBlock = false;
-                } else {
-                    thinkContent.append(remainingContent);
-                    remainingContent = '';
-                }
-            }
-        }
-
-        // Собираем структуру сообщения
-        thinkContainer.append(thinkToggle).append(thinkContent);
-        aiMessageEl.append(thinkContainer).append(mainTextEl);
-
-        // Настраиваем поведение кнопки, если есть think-контент
-        if (hasThinkContent) {
-            thinkToggle.on('click', function() {
-                thinkContent.slideToggle();
-                $(this).text(
-                    thinkContent.is(':visible')
-                    ? '📊 Скрыть рассуждения'
-                    : '📊 Показать рассуждения'
-                );
-            });
-        } else {
-            thinkContainer.remove();
-        }
-
-        // Для старых сообщений сразу показываем основной текст
-        if (isOldMessage) {
-            mainTextEl.show();
-        }
+        mainTextEl.text(content);  // безопасное добавление текста
+        aiMessageEl.append(mainTextEl);
 
         return aiMessageEl;
     }
+
 
     // Получение списка чатов
     function fetchChats() {
@@ -219,31 +167,10 @@ $(document).ready(function() {
         const loadingEl = $('<div class="message loading">Кринжик печатает...</div>');
         $('#response').append(loadingEl);
 
-        // Создаем элементы для вывода
-        const aiMessageEl = $('<div class="message ai-message"><strong>Кринжик:</strong> </div>');
-        const mainTextEl = $('<div class="ai-main-text"></div>');
-        const thinkContainer = $('<div class="think-container"></div>');
-        const thinkToggle = $('<button class="think-toggle">📊 Скрыть рассуждения</button>');
-        const thinkContent = $('<div class="think-content"></div>');
-
-        // Собираем структуру (рассуждения перед основным ответом)
-        thinkContainer.append(thinkToggle).append(thinkContent);
-        aiMessageEl.append(thinkContainer).append(mainTextEl);
+        // Создаём блок для AI-сообщения
+        const aiMessageEl = $('<div class="message ai-message"><strong>Кринжик:</strong> <span class="ai-text"></span></div>');
+        const aiTextEl = aiMessageEl.find('.ai-text');
         $('#response').append(aiMessageEl);
-
-        let inThinkBlock = false;
-        let thinkContentVisible = false;  // По умолчанию не видим рассуждения
-
-        // Обработчик для кнопки (добавляем сразу)
-        thinkToggle.on('click', function() {
-            thinkContentVisible = !thinkContentVisible;
-            thinkContent.toggle(thinkContentVisible);
-            $(this).text(
-                thinkContentVisible
-                ? '📊 Скрыть рассуждения'
-                : '📊 Показать рассуждения'
-            );
-        });
 
         fetch(`/api/deepseek?chatId=${activeChatId}&input=${encodeURIComponent(userInput)}`, {
             method: 'POST'
@@ -257,38 +184,6 @@ $(document).ready(function() {
             const reader = response.body.getReader();
             const decoder = new TextDecoder();
 
-            function processChunk(text) {
-                let remainingText = text;
-
-                while (remainingText.length > 0) {
-                    if (!inThinkBlock) {
-                        const thinkStart = remainingText.indexOf('<think>');
-                        if (thinkStart >= 0) {
-                            // Добавляем текст до тега <think>
-                            mainTextEl.append(remainingText.substring(0, thinkStart));
-                            inThinkBlock = true;
-                            remainingText = remainingText.substring(thinkStart + 7);
-                        } else {
-                            // Просто добавляем весь текст
-                            mainTextEl.append(remainingText);
-                            remainingText = '';
-                        }
-                    } else {
-                        const thinkEnd = remainingText.indexOf('</think>');
-                        if (thinkEnd >= 0) {
-                            // Добавляем содержимое think-блока
-                            thinkContent.append(remainingText.substring(0, thinkEnd));
-                            remainingText = remainingText.substring(thinkEnd + 8);
-                            inThinkBlock = false;
-                        } else {
-                            // Добавляем весь текст в think-блок
-                            thinkContent.append(remainingText);
-                            remainingText = '';
-                        }
-                    }
-                }
-            }
-
             function readStream() {
                 reader.read().then(({ done, value }) => {
                     if (done) {
@@ -297,7 +192,7 @@ $(document).ready(function() {
                     }
 
                     const textChunk = decoder.decode(value, { stream: true });
-                    processChunk(textChunk);
+                    aiTextEl.append(document.createTextNode(textChunk));  // безопасное добавление текста
                     readStream();
                 });
             }
@@ -313,4 +208,11 @@ $(document).ready(function() {
 
     // Загружаем чаты при загрузке страницы
     fetchChats();
+});
+
+$('#userInput').on('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault(); // предотвращает перенос строки
+        $('#chatForm').submit(); // вызывает отправку формы
+    }
 });

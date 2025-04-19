@@ -27,19 +27,22 @@ h1 {
     padding: 10px;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
     z-index: 1000;
-    width: 50%; /* Ширина контейнера формы */
-    margin-left: auto; /* Центрируем контейнер */
-    margin-right: auto; /* Центрируем контейнер */
-    border-radius: 20px; /* Скругление углов */
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
 }
 
 #userInput {
-    width: 100%; /* Поле ввода занимает всю доступную ширину внутри контейнера */
+    width: 100%;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 10px;
+    max-height: 75px;
+    resize: none;
+    overflow-y: auto;
 }
 
 
@@ -57,13 +60,13 @@ button:hover {
 }
 #chat {
     width: 100%;
-    max-width: 600px;
+    max-width: 750px;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 80px; /* Отступ для формы ввода */
+    margin-bottom: 100px; /* Отступ для формы ввода */
     overflow-y: auto;
     flex-grow: 1;
 }
