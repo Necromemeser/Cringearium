@@ -157,7 +157,7 @@ public class OrderController {
             request.put("description", description);
             request.put("confirmation", Map.of(
                     "type", "redirect",
-                    "return_url", "https://cringearium.loca.lt/profile" // + orderId
+                    "return_url", "https://cringearium.onrender.com/profile" // + orderId
             ));
             request.put("capture", true);
             request.put("metadata", Map.of(
