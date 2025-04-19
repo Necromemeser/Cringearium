@@ -31,8 +31,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/courses/*/study").authenticated()
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
-                        .requestMatchers("/api/courses/**", "/api/courses/{courseId}/data/**", "/api/orders/**").permitAll() // delete later
-                        .requestMatchers("/", "/courses", "/courses/**", "/registration", "/payments/webhook").permitAll()
+                        .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
+                        .requestMatchers("/api/user/registration", "/api/payments/webhook").permitAll()
                         .requestMatchers("/info/**").permitAll()
                         .requestMatchers("/api/ollama").authenticated()
                         .requestMatchers("/api/chats/**").authenticated()
