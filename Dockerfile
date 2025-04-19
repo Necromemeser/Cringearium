@@ -1,13 +1,15 @@
-FROM openjdk:23-jdk
+FROM openjdk:23-jdk AS builder
 
 WORKDIR /app
+COPY . .
 
-# Копируем файлы проекта
-COPY pom.xml .
-COPY src ./src
+# Собираем проект (используйте вашу команду сборки)
+RUN ./mvnw clean package
 
-COPY target/*.jar app.jar
+# Финальный образ
+FROM openjdk:23-jdk
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
