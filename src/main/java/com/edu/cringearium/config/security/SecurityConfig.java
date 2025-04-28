@@ -32,7 +32,10 @@ public class SecurityConfig {
                         .requestMatchers("/courses/*/study").authenticated()
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
-                        .requestMatchers("/api/user/registration", "/api/payments/webhook").permitAll()
+                        .requestMatchers("/api/user/registration", "/api/payments/webhook",
+                                "api/courses",
+                                "api/courses/**",
+                                "api/courses/*/**").permitAll()
                         .requestMatchers("/info/**").permitAll()
                         .requestMatchers("/api/ollama", "/api/deepseek").authenticated()
                         .requestMatchers("/api/chats/**").authenticated()

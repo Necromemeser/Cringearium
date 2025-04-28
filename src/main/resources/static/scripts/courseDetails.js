@@ -37,16 +37,13 @@ document.addEventListener('DOMContentLoaded', function() {
             courseImageElement.src = course.courseImage
                 ? `/api/courses/${course.id}/image`
                 : `/images/default-course.png`;
-            usersCountElement.textContent = course.users ? course.users.length : 0;
 
             // Настраиваем модальное окно
             modalCourseName.textContent = course.courseName;
             modalCoursePrice.textContent = `${course.price} ₽`;
-
         })
         .catch(error => {
             console.error('Ошибка загрузки курса:', error);
-            // Можно добавить обработку ошибки, например, редирект на 404
         });
 
     // Обработчик кнопки "Записаться на курс"
@@ -54,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
         paymentModal.show();
     });
 
-    // Обработчик кнопки "Войдите, чтобы оплатить" (если она существует)
+    // Обработчик кнопки "Войдите, чтобы оплатить"
     const LogInToPayBtn = document.getElementById('LogInToPayBtn');
     if (LogInToPayBtn) {
         LogInToPayBtn.addEventListener('click', function() {
