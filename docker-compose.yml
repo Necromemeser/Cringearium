@@ -8,9 +8,9 @@ services:
     environment:
       POSTGRES_INITDB_SCHEMA: cringearium
       POSTGRES_INITDB_SCHEMA_GRANT: postgres
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data

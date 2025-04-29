@@ -1,14 +1,17 @@
-FROM openjdk:23-jdk AS builder
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
 
 WORKDIR /app
-COPY . .
+COPY pom.xml .
+# Копируем исходный код
+COPY src ./src
 
-# Собираем проект (используйте вашу команду сборки)
-RUN ./mvnw clean package
+# Собираем приложение
+RUN mvn clean package -DskipTests
 
-# Финальный образ
-FROM openjdk:23-jdk
+FROM eclipse-temurin:21-jre-jammy
+
 WORKDIR /app
+# Копируем собранный JAR из этапа builder
 COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
