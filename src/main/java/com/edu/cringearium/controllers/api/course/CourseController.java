@@ -80,34 +80,66 @@ public class CourseController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Создать новый курс
+
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
-        // Устанавливаем текущее время создания, если оно не установлено
-        if (course.getCreatedAt() == null) {
-            course.setCreatedAt(LocalDateTime.now());
+    public ResponseEntity<Course> createCourse(
+            @RequestParam("courseName") String courseName,
+            @RequestParam("courseTheme") String courseTheme,
+            @RequestParam("price") Long price,
+            @RequestParam("courseDescription") String courseDescription,
+            @RequestParam(value = "courseImage", required = false) MultipartFile courseImage
+    ) {
+        Course course = new Course();
+        course.setCourseName(courseName);
+        course.setCourseTheme(courseTheme);
+        course.setPrice(price);
+        course.setCourseDescription(courseDescription);
+        course.setCreatedAt(LocalDateTime.now());
+
+        if (courseImage != null && !courseImage.isEmpty()) {
+            try {
+                course.setCourseImage(courseImage.getBytes());
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
         }
+
         Course savedCourse = courseRepository.save(course);
         return new ResponseEntity<>(savedCourse, HttpStatus.CREATED);
     }
 
-    // Обновить курс
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
+    public ResponseEntity<Course> updateCourse(
+            @PathVariable Long id,
+            @RequestParam("courseName") String courseName,
+            @RequestParam("courseTheme") String courseTheme,
+            @RequestParam("price") Long price,
+            @RequestParam("courseDescription") String courseDescription,
+            @RequestParam(value = "courseImage", required = false) MultipartFile courseImage
+    ) {
         Optional<Course> courseOptional = courseRepository.findById(id);
         if (courseOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         Course existingCourse = courseOptional.get();
-        existingCourse.setCourseName(courseDetails.getCourseName());
-        existingCourse.setCourseTheme(courseDetails.getCourseTheme());
-        existingCourse.setPrice(courseDetails.getPrice());
-        existingCourse.setCourseDescription(courseDetails.getCourseDescription());
+        existingCourse.setCourseName(courseName);
+        existingCourse.setCourseTheme(courseTheme);
+        existingCourse.setPrice(price);
+        existingCourse.setCourseDescription(courseDescription);
+
+        if (courseImage != null && !courseImage.isEmpty()) {
+            try {
+                existingCourse.setCourseImage(courseImage.getBytes());
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
 
         Course updatedCourse = courseRepository.save(existingCourse);
         return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
     }
+    
 
     // Удалить курс
     @DeleteMapping("/{id}")

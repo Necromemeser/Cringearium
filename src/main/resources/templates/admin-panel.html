@@ -49,9 +49,9 @@
                 <div class="tab-pane fade show active" id="users-tab-pane" role="tabpanel">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4>Управление пользователями</h4>
-                        <button class="btn btn-primary" id="addUserBtn">
-                            <i class="fas fa-plus me-1"></i>Добавить пользователя
-                        </button>
+<!--                        <button class="btn btn-primary" id="addUserBtn">-->
+<!--                            <i class="fas fa-plus me-1"></i>Добавить пользователя-->
+<!--                        </button>-->
                     </div>
                     <div class="table-responsive">
                         <table id="usersTable" class="table table-hover table-striped w-100">
@@ -134,17 +134,11 @@
                             <div class="col-md-6">
                                 <label for="userRole" class="form-label">Роль</label>
                                 <select class="form-select" id="userRole" required>
-                                    <option value="ADMIN">Администратор</option>
-                                    <option value="TEACHER">Преподаватель</option>
-                                    <option value="STUDENT" selected>Студент</option>
+                                    <option value="1">Администратор</option>
+                                    <option value="2">Преподаватель</option>
+                                    <option value="3" selected>Студент</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="profilePic" class="form-label">Аватар</label>
-                            <input class="form-control" type="file" id="profilePic" accept="image/*">
-                            <img id="userImagePreview" src="#" alt="Превью аватара"
-                                 style="max-width: 100px; max-height: 100px; display: none; margin-top: 10px;">
                         </div>
                     </form>
                 </div>

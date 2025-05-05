@@ -30,7 +30,7 @@ $(document).ready(function() {
                         let badgeClass = 'bg-secondary';
                         if (data === 'Admin') badgeClass = 'bg-danger';
                         if (data === 'Curator') badgeClass = 'bg-primary';
-                        if (data === 'Student') badgeClass = 'bg-success';
+                        if (data === 'Teacher') badgeClass = 'bg-success';
                         return `<span class="badge ${badgeClass} badge-role">${data}</span>`;
                     }
                 },
@@ -95,30 +95,29 @@ $(document).ready(function() {
 
     // Сохранение пользователя
     $('#saveUserBtn').click(function() {
-        const formData = new FormData();
-        formData.append('username', $('#username').val());
-        formData.append('email', $('#email').val());
-        formData.append('userRole', $('#userRole').val());
+        const userData = {
+            id: currentUserId,
+            username: $('#username').val(),
+            email: $('#email').val(),
+            user_role_id: Number($('#userRole').val())
+        };
 
+        // Добавляем пароль только если он указан
         const password = $('#password').val();
         if (password) {
-            formData.append('password', password);
-        }
-
-        const profilePic = $('#profilePic')[0].files[0];
-        if (profilePic) {
-            formData.append('profilePic', profilePic);
+            userData.passwordHash = password;
         }
 
         const url = currentUserId ? `${apiUrl}/${currentUserId}` : apiUrl;
         const method = currentUserId ? 'PUT' : 'POST';
 
+        console.log(url, method, userData);
+
         $.ajax({
             url: url,
             type: method,
-            data: formData,
-            processData: false,
-            contentType: false,
+            contentType: 'application/json',
+            data: JSON.stringify(userData),
             success: function() {
                 usersTable.ajax.reload();
                 $('#userModal').modal('hide');
