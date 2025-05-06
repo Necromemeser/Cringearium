@@ -33,9 +33,9 @@ public class SecurityConfig {
                         .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
                         .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
                         .requestMatchers("/api/user/registration", "/api/payments/webhook",
-                                "api/courses",
-                                "api/courses/**",
-                                "api/courses/*/**").permitAll()
+                                "/api/courses",
+                                "/api/courses/**",
+                                "/api/courses/*/**").permitAll()
                         .requestMatchers("/info/**").permitAll()
                         .requestMatchers("/api/ollama", "/api/deepseek").authenticated()
                         .requestMatchers("/api/chats/**").authenticated()
@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")            // Кастомная страница логина
                         .loginProcessingUrl("/perform_login") // URL для обработки формы
-//                        .defaultSuccessUrl("/profile", true)   // Перенаправление после успешного входа
                         .failureUrl("/login?error=true") // Перенаправление при ошибке
                         .permitAll()
 

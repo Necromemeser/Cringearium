@@ -73,6 +73,7 @@ public class UserController {
     }
 
 
+    @Transactional
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -120,21 +121,49 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+        System.out.println(id);
+        System.out.println(userDTO.getUsername());
+        System.out.println(userRepository.findById(id).map(User::getUsername));
         return userRepository.findById(id)
                 .map(user -> {
                     user.setUsername(userDTO.getUsername());
                     user.setEmail(userDTO.getEmail());
-                    user.setPasswordHash(userDTO.getPasswordHash());
-                    user.setProfilePic(userDTO.getProfilePic());
 
+                    // Если пароль не обновляется, то с клиента приходит null
+                    if (userDTO.getPasswordHash() != null) {
+                        user.setPasswordHash(passwordEncoder.encode(userDTO.getPasswordHash()));
+                    }
+
+                    System.out.println("userRole: " + userDTO.getUserRoleId());
+
+                    System.out.println("Before finding role");
                     Optional<UserRole> userRoleOpt = userRoleRepository.findById(userDTO.getUserRoleId());
+                    System.out.println("After finding role" + userRoleOpt.get());
                     if (userRoleOpt.isEmpty()) {
-                        return ResponseEntity.badRequest().body(user); // Возвращаем существующего пользователя
+                        return ResponseEntity.badRequest().build();
                     }
                     user.setUserRole(userRoleOpt.get());
+                    System.out.println("Got our role");
 
-                    return ResponseEntity.ok(userRepository.save(user));
+                    userRepository.save(user);
+                    System.out.println("SAVE");
+                    return ResponseEntity.ok().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/ban")
+    public ResponseEntity<?> banUser(@PathVariable("id") Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    Optional<UserRole> userRoleOpt = userRoleRepository.findById(2L);
+                    if (userRoleOpt.isEmpty()) {
+                        return ResponseEntity.badRequest().build();
+                    }
+                    user.setUserRole(userRoleOpt.get());
+                    userRepository.save(user);
+                    return ResponseEntity.ok().build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -150,11 +179,13 @@ public class UserController {
 
 
     // Для вывода курсов в личном кабинете
+    @Transactional
     @GetMapping("/courses")
     public ResponseEntity<List<UserCourseDTO>> getUserCourses(@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<UserCourseDTO> courses = userService.getUserCourses(userDetails.getUser().getId());
         return ResponseEntity.ok(courses);
     }
+
 
 
 

@@ -51,3 +51,7 @@
     font-size: 0.8em;
     display: inline-block;
 }
+
+.nav-link:hover {
+    color: black !important;
+}

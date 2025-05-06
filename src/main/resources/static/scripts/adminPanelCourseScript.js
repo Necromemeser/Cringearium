@@ -3,7 +3,23 @@ $(document).ready(function() {
     let coursesTable;
     let currentCourseId = null;
 
-    // Инициализация DataTable для курсов
+    // Контейнер для уведомлений
+    $('body').append('<div id="alertContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;"></div>');
+
+    function showToast(title, message, type) {
+        const alertId = `alert-${Date.now()}`;
+        const alertHtml = `
+            <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <strong>${title}</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        $('#alertContainer').append(alertHtml);
+        setTimeout(() => {
+            $(`#${alertId}`).alert('close');
+        }, 5000);
+    }
+
     function initCoursesTable() {
         coursesTable = $('#coursesTable').DataTable({
             ajax: {
@@ -58,7 +74,6 @@ $(document).ready(function() {
         });
     }
 
-    // Открытие модального окна для редактирования
     $(document).on('click', '.edit-course-btn', function() {
         currentCourseId = $(this).data('id');
         $.get(`${apiUrl}/${currentCourseId}`, function(course) {
@@ -69,7 +84,6 @@ $(document).ready(function() {
             $('#coursePrice').val(course.price);
             $('#courseDescription').val(course.courseDescription);
 
-            // Превью изображения
             if (course.courseImage) {
                 $('#courseImagePreview').attr('src', `data:image/jpeg;base64,${course.courseImage}`).show();
             } else {
@@ -82,7 +96,6 @@ $(document).ready(function() {
         });
     });
 
-    // Открытие модального окна для добавления
     $(document).on('click', '#addCourseBtn', function() {
         currentCourseId = null;
         $('#courseModalTitle').text('Добавление курса');
@@ -91,7 +104,6 @@ $(document).ready(function() {
         $('#courseModal').modal('show');
     });
 
-    // Просмотр изображения перед загрузкой
     $('#courseImage').change(function() {
         const file = this.files[0];
         if (file) {
@@ -103,13 +115,11 @@ $(document).ready(function() {
         }
     });
 
-    // Подтверждение удаления
     $(document).on('click', '.delete-course-btn', function() {
         currentCourseId = $(this).data('id');
         $('#confirmDeleteCourseModal').modal('show');
     });
 
-    // Сохранение курса
     $('#saveCourseBtn').click(function() {
         const formData = new FormData();
         formData.append('courseName', $('#courseName').val());
@@ -142,7 +152,6 @@ $(document).ready(function() {
         });
     });
 
-    // Удаление курса
     $('#confirmDeleteCourseBtn').click(function() {
         $.ajax({
             url: `${apiUrl}/${currentCourseId}`,
@@ -158,13 +167,5 @@ $(document).ready(function() {
         });
     });
 
-    // Вспомогательная функция для показа уведомлений
-    function showToast(title, message, type) {
-        // Реализация toast-уведомлений (можно использовать Bootstrap Toasts)
-        console.log(`${title}: ${message}`);
-        alert(`${title}: ${message}`);
-    }
-
-    // Инициализация таблицы
     initCoursesTable();
 });
