@@ -3,7 +3,23 @@ $(document).ready(function() {
     let usersTable;
     let currentUserId = null;
 
-    // Инициализация DataTable
+    // Контейнер для уведомлений
+    $('body').append('<div id="alertContainer" class="position-fixed bottom-0 end-0 p-3" style="z-index: 1050;"></div>');
+
+    function showToast(title, message, type) {
+        const alertId = `alert-${Date.now()}`;
+        const alertHtml = `
+            <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <strong>${title}</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        $('#alertContainer').append(alertHtml);
+        setTimeout(() => {
+            $(`#${alertId}`).alert('close');
+        }, 5000);
+    }
+
     function initUsersTable() {
         usersTable = $('#usersTable').DataTable({
             ajax: {
@@ -28,9 +44,9 @@ $(document).ready(function() {
                     render: function(data) {
                         if (!data) return '';
                         let badgeClass = 'bg-secondary';
-                        if (data === 'Admin') badgeClass = 'bg-danger';
-                        if (data === 'Curator') badgeClass = 'bg-primary';
-                        if (data === 'Teacher') badgeClass = 'bg-success';
+                        if (data === 'Admin') badgeClass = 'bg-primary';
+                        if (data === 'Ban') badgeClass = 'bg-danger';
+                        if (data === 'Student') badgeClass = 'bg-success';
                         return `<span class="badge ${badgeClass} badge-role">${data}</span>`;
                     }
                 },
@@ -51,22 +67,18 @@ $(document).ready(function() {
                                 <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${data}">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${data}">
-                                    <i class="fas fa-trash"></i>
+                                <button class="btn btn-sm btn-outline-danger ban-btn" data-id="${data}">
+                                    <i class="fas fa-ban"></i>
                                 </button>
                             </div>
                         `;
                     },
                     orderable: false
                 }
-            ],
-            language: {
-                url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/ru.json'
-            }
+            ]
         });
     }
 
-    // Открытие модального окна для редактирования
     $(document).on('click', '.edit-btn', function() {
         currentUserId = $(this).data('id');
         $.get(`${apiUrl}/${currentUserId}`, function(user) {
@@ -76,10 +88,11 @@ $(document).ready(function() {
             $('#email').val(user.email);
             $('#userRole').val(user.userRole);
             $('#userModal').modal('show');
+        }).fail(function() {
+            showToast('Ошибка', 'Не удалось загрузить данные пользователя', 'danger');
         });
     });
 
-    // Открытие модального окна для добавления
     $(document).on('click', '#addUserBtn', function() {
         currentUserId = null;
         $('#modalTitle').text('Добавление пользователя');
@@ -87,13 +100,11 @@ $(document).ready(function() {
         $('#userModal').modal('show');
     });
 
-    // Подтверждение удаления
-    $(document).on('click', '.delete-btn', function() {
+    $(document).on('click', '.ban-btn', function() {
         currentUserId = $(this).data('id');
-        $('#confirmDeleteModal').modal('show');
+        $('#confirmBanModal').modal('show');
     });
 
-    // Сохранение пользователя
     $('#saveUserBtn').click(function() {
         const userData = {
             id: currentUserId,
@@ -102,7 +113,6 @@ $(document).ready(function() {
             user_role_id: Number($('#userRole').val())
         };
 
-        // Добавляем пароль только если он указан
         const password = $('#password').val();
         if (password) {
             userData.passwordHash = password;
@@ -111,7 +121,6 @@ $(document).ready(function() {
         const url = currentUserId ? `${apiUrl}/${currentUserId}` : apiUrl;
         const method = currentUserId ? 'PUT' : 'POST';
 
-        console.log(url, method, userData);
 
         $.ajax({
             url: url,
@@ -129,15 +138,14 @@ $(document).ready(function() {
         });
     });
 
-    // Удаление пользователя
-    $('#confirmDeleteBtn').click(function() {
+    $('#confirmBanBtn').click(function() {
         $.ajax({
-            url: `${apiUrl}/${currentUserId}`,
-            type: 'DELETE',
+            url: `${apiUrl}/${currentUserId}/ban`,
+            type: 'PUT',
             success: function() {
                 usersTable.ajax.reload();
-                $('#confirmDeleteModal').modal('hide');
-                showToast('Успех', 'Пользователь удален', 'success');
+                $('#confirmBanModal').modal('hide');
+                showToast('Успех', 'Пользователь забанен', 'success');
             },
             error: function(xhr) {
                 showToast('Ошибка', xhr.responseJSON?.message || 'Произошла ошибка', 'danger');
@@ -145,12 +153,5 @@ $(document).ready(function() {
         });
     });
 
-    // Вспомогательная функция для показа уведомлений
-    function showToast(title, message, type) {
-        // Здесь можно реализовать toast-уведомления
-        alert(`${title}: ${message}`);
-    }
-
-    // Инициализация таблицы
     initUsersTable();
 });

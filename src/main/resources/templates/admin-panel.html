@@ -135,7 +135,7 @@
                                 <label for="userRole" class="form-label">Роль</label>
                                 <select class="form-select" id="userRole" required>
                                     <option value="1">Администратор</option>
-                                    <option value="2">Преподаватель</option>
+                                    <option value="2">Бан</option>
                                     <option value="3" selected>Студент</option>
                                 </select>
                             </div>
@@ -151,7 +151,7 @@
     </div>
 
     <!-- Подтверждение удаления пользователя -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="confirmBanModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -159,11 +159,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Вы уверены, что хотите удалить этого пользователя? Это действие нельзя отменить.
+                    Вы уверены, что хотите забанить этого пользователя?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Удалить</button>
+                    <button type="button" class="btn btn-danger" id="confirmBanBtn">Забанить</button>
                 </div>
             </div>
         </div>

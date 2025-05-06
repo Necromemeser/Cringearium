@@ -1,14 +1,11 @@
--- Создание схемы
 CREATE SCHEMA IF NOT EXISTS cringearium;
 
--- Таблица user_role
 CREATE TABLE IF NOT EXISTS cringearium.user_role (
     user_role_id SERIAL PRIMARY KEY,
     role_name VARCHAR(45) NOT NULL,
     description TEXT NOT NULL
 );
 
--- Таблица user_account
 CREATE TABLE IF NOT EXISTS cringearium.user_account (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(45) NOT NULL,
@@ -23,14 +20,12 @@ CREATE TABLE IF NOT EXISTS cringearium.user_account (
         ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
--- Таблица chat
 CREATE TABLE IF NOT EXISTS cringearium.chat (
     chat_id SERIAL PRIMARY KEY,
     chat_name VARCHAR(45) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
--- Таблица user_chat
 CREATE TABLE IF NOT EXISTS cringearium.user_chat (
     chat_id INT NOT NULL,
     user_id INT NOT NULL,
@@ -43,7 +38,6 @@ CREATE TABLE IF NOT EXISTS cringearium.user_chat (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Таблица message
 CREATE TABLE IF NOT EXISTS cringearium.message (
     message_id SERIAL PRIMARY KEY,
     content oid NOT NULL,
@@ -59,7 +53,6 @@ CREATE TABLE IF NOT EXISTS cringearium.message (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Таблица course
 CREATE TABLE IF NOT EXISTS cringearium.course (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(45) NOT NULL,
@@ -70,7 +63,6 @@ CREATE TABLE IF NOT EXISTS cringearium.course (
     course_image oid
 );
 
--- Таблица course_data
 CREATE TABLE IF NOT EXISTS cringearium.course_data (
     course_data_id SERIAL PRIMARY KEY,
     content oid NOT NULL,
@@ -80,7 +72,6 @@ CREATE TABLE IF NOT EXISTS cringearium.course_data (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Таблица order_table
 CREATE TABLE IF NOT EXISTS cringearium.order_table (
     order_id SERIAL PRIMARY KEY,
     status VARCHAR(45) NOT NULL,
@@ -95,7 +86,6 @@ CREATE TABLE IF NOT EXISTS cringearium.order_table (
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Таблица user_course
 CREATE TABLE IF NOT EXISTS cringearium.user_course (
     user_id INT NOT NULL,
     course_id INT NOT NULL,
@@ -112,7 +102,7 @@ CREATE TABLE IF NOT EXISTS cringearium.user_course (
 
 INSERT INTO cringearium.user_role (role_name, description) VALUES
     ('Admin', 'Администратор системы'),
-    ('Curator', 'Куратор курсов'),
+    ('Ban', 'Забанен.'),
     ('Student', 'Студент, рядовой пользователь');
 
 INSERT INTO cringearium.user_account (username, email, password_hash, user_role_id) VALUES

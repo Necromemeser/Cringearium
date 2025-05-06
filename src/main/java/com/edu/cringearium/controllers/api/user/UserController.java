@@ -121,7 +121,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDTO userDTO) {
         System.out.println(id);
         System.out.println(userDTO.getUsername());
         System.out.println(userRepository.findById(id).map(User::getUsername));
@@ -139,13 +139,31 @@ public class UserController {
 
                     System.out.println("Before finding role");
                     Optional<UserRole> userRoleOpt = userRoleRepository.findById(userDTO.getUserRoleId());
-                    System.out.println("After finding role");
+                    System.out.println("After finding role" + userRoleOpt.get());
                     if (userRoleOpt.isEmpty()) {
-                        return ResponseEntity.badRequest().body(user);
+                        return ResponseEntity.badRequest().build();
                     }
                     user.setUserRole(userRoleOpt.get());
+                    System.out.println("Got our role");
 
-                    return ResponseEntity.ok(userRepository.save(user));
+                    userRepository.save(user);
+                    System.out.println("SAVE");
+                    return ResponseEntity.ok().build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/ban")
+    public ResponseEntity<?> banUser(@PathVariable("id") Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    Optional<UserRole> userRoleOpt = userRoleRepository.findById(2L);
+                    if (userRoleOpt.isEmpty()) {
+                        return ResponseEntity.badRequest().build();
+                    }
+                    user.setUserRole(userRoleOpt.get());
+                    userRepository.save(user);
+                    return ResponseEntity.ok().build();
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

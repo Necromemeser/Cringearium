@@ -21,9 +21,10 @@ $(document).ready(function() {
                 $('#chatList').empty();
                 if (Array.isArray(chats)) {
                     chats.forEach((chat) => {
+                        console.log(chat)
                         $('#chatList').append(`
                             <li class="chatItem" data-id="${chat.id}">
-                                ${chat.chatName} <button class="deleteChatBtn">Удалить</button>
+                                Чат ${chat.id} <button class="deleteChatBtn">Удалить</button>
                             </li>
                         `);
                     });
