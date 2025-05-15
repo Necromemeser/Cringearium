@@ -30,7 +30,7 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/courses/*/study").authenticated()
-                        .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/webjars/**").permitAll()
+                        .requestMatchers("/styles/**", "/scripts/**", "/images/**", "/favicon.ico", "/webjars/**").permitAll()
                         .requestMatchers("/", "/courses", "/courses/**", "/registration").permitAll()
                         .requestMatchers("/api/user/registration", "/api/payments/webhook",
                                 "/api/courses",
