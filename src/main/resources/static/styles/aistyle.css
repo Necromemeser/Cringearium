@@ -85,27 +85,11 @@ button:hover {
 }
 
 /* Панель слева */
-#sidePanel {
-    position: fixed;
-    top: 64px;
-    left: -250px; /* Панель скрыта по умолчанию */
-    width: 250px;
-    height: 100%;
-    background-color: #fff;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    padding-top: 60px;
-    transition: left 0.3s ease;
-    z-index: 999;
-}
 
 #sidePanel.open {
-    left: 0;
+    left: 0px;
 }
-#sidePanel h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
+
 #sidePanel ul {
     list-style: none;
     padding: 0;
@@ -163,3 +147,181 @@ button:hover {
     color: #333;
     text-decoration: underline;
 }
+
+.chatItem.selected {
+    background-color: #e9ecef;
+    border-left: 4px solid #0d6efd;
+    color: #0d6efd;
+    font-weight: 500;
+    padding-left: 16px;
+    transition: all 0.1s ease;
+}
+
+.chatItem {
+    padding: 8px 20px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.chatItem:hover {
+    background-color: #f8f9fa;
+}
+
+
+/* Обновленный код */
+
+/* Стили для боковой панели */
+#sidePanel {
+    position: fixed;
+    top: 64px;
+    left: -250px;
+    width: 250px;
+    height: calc(100% - 64px);
+    background-color: #fff;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+}
+
+#sidePanel h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+#createChatBtn {
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+#createChatBtn:hover {
+    background-color: #0069d9;
+}
+
+.chat-list-container {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#chatList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.chatItem {
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chatItem:hover {
+    background-color: #f8f9fa;
+}
+
+.deleteChatBtn {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.deleteChatBtn:hover {
+    background-color: #c82333;
+}
+
+.chatItem.selected {
+    background-color: #e9ecef;
+    border-left: 3px solid #0d6efd;
+    color: #0d6efd;
+    font-weight: 500;
+}
+
+
+/* Scrollbar */
+.chat-list-container {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Стиль скроллбара */
+.chat-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.chat-list-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.chat-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Стили для модального окна */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin-top: 150px;
+
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 8px 16px;
+    border-radius: 4px;
+}
+
+#confirmDeleteBtn {
+    background-color: #dc3545;
+}
+
+#cancelDeleteBtn {
+    background-color: #6c757d;
+}
+

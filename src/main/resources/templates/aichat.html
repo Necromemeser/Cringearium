@@ -20,10 +20,14 @@
 <!-- Панель с чатами -->
 <div id="sidePanel">
     <h2>Чаты</h2>
-    <ul id="chatList">
-        <!-- Здесь будут отображаться чаты -->
-    </ul>
-    <button id="createChatBtn">Создать чат</button>
+    <button id="createChatBtn" class="rounded-btn">
+        <i class="fas fa-plus"></i> Создать чат
+    </button>
+    <div class="chat-list-container">
+        <ul id="chatList">
+            <!-- Здесь будут отображаться чаты -->
+        </ul>
+    </div>
 </div>
 
 <div id="chat">
@@ -36,11 +40,19 @@
     <button type="submit">Отправить</button>
 </form>
 
-<!--<div th:replace="fragments/footer :: footer"></div>-->
+<!-- Модальное окно подтверждения удаления -->
+<div id="deleteChatModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <p>Вы уверены, что хотите удалить этот чат?</p>
+        <div class="modal-buttons">
+            <button id="confirmDeleteBtn">Удалить</button>
+            <button id="cancelDeleteBtn">Отмена</button>
+        </div>
+    </div>
+</div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/scripts/aiscript.js" defer></script>
 </body>
 </html>
-
-

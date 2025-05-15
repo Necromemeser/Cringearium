@@ -11,7 +11,7 @@ $(document).ready(function() {
     }
 
 
-    // Получение списка чатов
+    // Получение списка чатов (обновленная версия)
     function fetchChats() {
         $.ajax({
             url: '/api/chats',
@@ -20,11 +20,16 @@ $(document).ready(function() {
             success: function(chats) {
                 $('#chatList').empty();
                 if (Array.isArray(chats)) {
+                    // Сортируем чаты по ID в обратном порядке (новые сверху)
+                    chats.sort((a, b) => b.id - a.id);
+
                     chats.forEach((chat) => {
-                        console.log(chat)
                         $('#chatList').append(`
                             <li class="chatItem" data-id="${chat.id}">
-                                Чат ${chat.id} <button class="deleteChatBtn">Удалить</button>
+                                Чат ${chat.id}
+                                <button class="deleteChatBtn">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                             </li>
                         `);
                     });
@@ -34,11 +39,7 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Ошибка при загрузке чатов:', {
-                    status: status,
-                    error: error,
-                    response: xhr.responseText
-                });
+                console.error('Ошибка при загрузке чатов:', error);
                 alert('Ошибка при загрузке чатов');
             }
         });
@@ -58,9 +59,12 @@ $(document).ready(function() {
             dataType: 'json',
             data: JSON.stringify({ chatName: "Новый чат" }),
             success: function(chat) {
-                console.log('Чат создан:', chat);
                 fetchChats();
-                $(`.chatItem[data-id="${chat.id}"]`).click();
+
+                setTimeout(() => {
+                    $(`.chatItem[data-id="${chat.id}"]`).click();
+                }, 100);
+
             },
             error: function(xhr, status, error) {
                 console.error('Ошибка при создании чата:', {
@@ -73,26 +77,40 @@ $(document).ready(function() {
         });
     });
 
-    // Удаление чата
+    // Удаление чата с модальным окном подтверждения
+    let currentChatIdToDelete = null;
+
+    // Показываем модальное окно при клике на удаление
     $(document).on('click', '.deleteChatBtn', function(event) {
         event.stopPropagation();
-        const chatId = $(this).parent().data('id');
-        $.ajax({
-            url: `/api/chats/${chatId}`,
-            method: 'DELETE',
-            success: function() {
-                fetchChats();
-                $('#response').empty();
-            },
-            error: function(xhr, status, error) {
-                console.error('Ошибка при удалении чата:', {
-                    status: status,
-                    error: error,
-                    response: xhr.responseText
-                });
-                alert('Ошибка при удалении чата ' + chatId);
-            }
-        });
+        currentChatIdToDelete = $(this).parent().data('id');
+        $('#deleteChatModal').show();
+    });
+
+    // Обработчик подтверждения удаления
+    $('#confirmDeleteBtn').on('click', function() {
+        if (currentChatIdToDelete) {
+            $.ajax({
+                url: `/api/chats/${currentChatIdToDelete}`,
+                method: 'DELETE',
+                success: function() {
+                    fetchChats();
+                    $('#response').empty();
+                    $('#deleteChatModal').hide();
+                },
+                error: function(xhr) {
+                    console.error('Ошибка при удалении чата:', xhr.responseText);
+                    alert('Ошибка при удалении чата');
+                    $('#deleteChatModal').hide();
+                }
+            });
+        }
+    });
+
+    // Обработчик отмены удаления
+    $('#cancelDeleteBtn').on('click', function() {
+        $('#deleteChatModal').hide();
+        currentChatIdToDelete = null;
     });
 
     // Переключение между чатами и загрузка сообщений
@@ -147,62 +165,83 @@ $(document).ready(function() {
         });
     });
 
-    // Отправка новых сообщений
+    // Отправка новых сообщений (исправленная версия)
     $('#chatForm').on('submit', function(event) {
         event.preventDefault();
-        const userInput = $('#userInput').val();
-        const activeChatId = $('.chatItem.selected').data('id');
+        const userInput = $('#userInput').val().trim();
 
-        if (!activeChatId) {
-            alert('Выберите чат для отправки сообщения');
+        if (!userInput) return;
+
+        // Используем let вместо const для activeChatId
+        let activeChatId = $('.chatItem.selected').data('id');
+
+        // Создаем функцию для отправки сообщения
+        const sendMessage = function(chatId) {
+            $('#response').append(`<div class="message user-message"><strong>Вы:</strong> ${userInput}</div>`);
+            $('#userInput').val('');
+
+            const loadingEl = $('<div class="message loading">Кринжик печатает...</div>');
+            $('#response').append(loadingEl);
+
+            const aiMessageEl = $('<div class="message ai-message"><strong>Кринжик:</strong> <span class="ai-text"></span></div>');
+            const aiTextEl = aiMessageEl.find('.ai-text');
+            $('#response').append(aiMessageEl);
+
+            fetch(`/api/deepseek?chatId=${chatId}&input=${encodeURIComponent(userInput)}`, {
+                method: 'POST'
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка сети');
+                }
+                return response;
+            }).then(response => {
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+
+                function readStream() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            loadingEl.remove();
+                            return;
+                        }
+                        const textChunk = decoder.decode(value, { stream: true });
+                        aiTextEl.append(document.createTextNode(textChunk));
+                        readStream();
+                    });
+                }
+                readStream();
+            }).catch(error => {
+                console.error('Ошибка:', error);
+                loadingEl.remove();
+                $('#response').append(`<div class="message ai-message"><strong>Ошибка:</strong> ${error.message}</div>`);
+            });
+        };
+
+        // Если чат уже выбран - сразу отправляем сообщение
+        if (activeChatId) {
+            sendMessage(activeChatId);
             return;
         }
 
-        if (!userInput.trim()) {
-            return;
-        }
+        // Если чат не выбран - создаем новый
+        $.ajax({
+            url: '/api/chats',
+            method: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({ chatName: userInput.substring(0, 30) || "Новый чат" })
+        }).done(function(chat) {
+            // Обновляем список чатов и выбираем новый чат
+            fetchChats();
 
-        $('#response').append(`<div class="message user-message"><strong>Вы:</strong> ${userInput}</div>`);
-        $('#userInput').val('');
-
-        const loadingEl = $('<div class="message loading">Кринжик печатает...</div>');
-        $('#response').append(loadingEl);
-
-        // Создаём блок для AI-сообщения
-        const aiMessageEl = $('<div class="message ai-message"><strong>Кринжик:</strong> <span class="ai-text"></span></div>');
-        const aiTextEl = aiMessageEl.find('.ai-text');
-        $('#response').append(aiMessageEl);
-
-        fetch(`/api/deepseek?chatId=${activeChatId}&input=${encodeURIComponent(userInput)}`, {
-            method: 'POST'
-        }).then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text || 'Ошибка сети');
-                });
-            }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-
-            function readStream() {
-                reader.read().then(({ done, value }) => {
-                    if (done) {
-                        loadingEl.remove();
-                        return;
-                    }
-
-                    const textChunk = decoder.decode(value, { stream: true });
-                    aiTextEl.append(document.createTextNode(textChunk));  // безопасное добавление текста
-                    readStream();
-                });
-            }
-
-            readStream();
-        }).catch(error => {
-            console.error('Ошибка при отправке сообщения:', error);
-            loadingEl.remove();
-            $('#response').append(`<div class="message ai-message"><strong>Кринжик:</strong> Ошибка: ${error.message}</div>`);
+            // Небольшая задержка для обновления DOM
+            setTimeout(() => {
+                $(`.chatItem[data-id="${chat.id}"]`).addClass('selected');
+                sendMessage(chat.id);
+            }, 100);
+        }).fail(function(xhr) {
+            console.error('Ошибка при создании чата:', xhr.responseText);
+            $('#response').append(`<div class="message ai-message"><strong>Ошибка:</strong> Не удалось создать чат</div>`);
         });
     });
 
